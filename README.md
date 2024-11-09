@@ -1,6 +1,6 @@
 TASK : 
-- Registrasi Pengguna;
-- Login dan Logout;
+- ~~Registrasi Pengguna;
+- ~~Login dan Logout;
 - Menambahkan Thread;
 - Melihat Thread;
 - Menambahkan dan Menghapus Komentar pada Thread; serta
