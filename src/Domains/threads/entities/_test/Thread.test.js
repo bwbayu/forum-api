@@ -27,7 +27,7 @@ describe('a Thread entities', () => {
         expect(() => new Thread(payload)).toThrowError('THREAD.TITLE_LIMIT_CHAR');
     });
 
-    it('should create registerUser object correctly', () => {
+    it('should create thread object correctly', () => {
         const payload = {
             title: 'thread 1',
             body: 'isi thread 1',
