@@ -4,7 +4,7 @@ describe('a added thread entities', () => {
     it('should throw error when payload did not contain needed property', () => {
         const payload = {
             title: 'abc',
-            userId : 'user-12345678'
+            user_id : 'user-12345678'
         };
 
         expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
@@ -14,7 +14,7 @@ describe('a added thread entities', () => {
         const payload = {
             id: 'thread-12345678',
             title: 123,
-            userId : 'user-12345678'
+            user_id : 'user-12345678'
         };
 
         expect(() => new AddedThread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -24,13 +24,13 @@ describe('a added thread entities', () => {
         const payload = {
             id: 'thread-12345678',
             title: 'thread 1',
-            userId: 'user-123345678',
+            user_id: 'user-123345678',
         };
 
-        const { id, title, userId } = new AddedThread(payload);
+        const { id, title, user_id } = new AddedThread(payload);
 
         expect(id).toEqual(payload.id);
         expect(title).toEqual(payload.title);
-        expect(userId).toEqual(payload.userId);
+        expect(user_id).toEqual(payload.user_id);
     });
 })
