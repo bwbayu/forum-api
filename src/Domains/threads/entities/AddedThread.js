@@ -9,11 +9,11 @@ class AddedThread {
     }
 
     _verifyPayload({id, title, user_id}){
-        if (!title || !user_id || !id) {
+        if (!id || !title || !user_id) {
             throw new Error('ADDED_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
-        if (typeof title !== 'string' || typeof user_id !== 'string' || typeof id !== 'string') {
+        if (typeof id !== 'string' || typeof title !== 'string' || typeof user_id !== 'string') {
             throw new Error('ADDED_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }
