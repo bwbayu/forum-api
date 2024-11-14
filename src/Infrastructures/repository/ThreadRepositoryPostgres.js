@@ -1,5 +1,6 @@
 const AddedThread = require('../../Domains/threads/entities/AddedThread');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
+const InvariantError = require('../../Commons/exceptions/InvariantError');
 
 class ThreadRepositoryPostgres extends ThreadRepository {
     constructor(pool, idGenerator){
@@ -14,12 +15,26 @@ class ThreadRepositoryPostgres extends ThreadRepository {
         const created_at = new Date().toISOString();
 
         const query = {
-            text: 'INSERT INTO threads VALUES ($1, $2, $3, $4, $5) RETURNING id, title, user_id',
+            text: 'INSERT INTO threads VALUES ($1, $2, $3, $4, $5) RETURNING id, title, user_id AS owner',
             values: [id, user_id, title, body, created_at]
-        }
+        };
 
         const result = await this._pool.query(query);
         return new AddedThread({ ...result.rows[0] });
+    }
+
+    async getThreadById(threadId) {
+        const query = {
+            text: 'SELECT * FROM threads WHERE id=$1',
+            values: [threadId],
+        };
+
+        const result = await this._pool.query(query);
+        if (!result.rowCount) {
+            throw new InvariantError('thread tidak ditemukan');
+        }
+
+        return result.rows[0];
     }
 }
 
