@@ -123,13 +123,13 @@ describe('UserRepositoryPostgres', () => {
     });
   });
 
-  describe('getUsernameById', () => {
+  describe('getUserById', () => {
     it('should throw InvariantError when user not found', () => {
       // Arrange
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
       // Action & Assert
-      return expect(userRepositoryPostgres.getUsernameById('user-123'))
+      return expect(userRepositoryPostgres.getUserById('user-123'))
         .rejects
         .toThrowError(InvariantError);
     });
@@ -140,10 +140,10 @@ describe('UserRepositoryPostgres', () => {
       const userRepositoryPostgres = new UserRepositoryPostgres(pool, {});
 
       // Action
-      const username = await userRepositoryPostgres.getUsernameById('user-123');
+      const user = await userRepositoryPostgres.getUserById('user-123');
 
       // Assert
-      expect(username).toEqual('dicoding');
+      expect(user.username).toEqual('dicoding');
     });
   });
 });

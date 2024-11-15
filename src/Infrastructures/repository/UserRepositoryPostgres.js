@@ -68,9 +68,9 @@ class UserRepositoryPostgres extends UserRepository {
     return id;
   }
 
-  async getUsernameById(user_id){
+  async getUserById(user_id){
     const query = {
-      text: 'SELECT username FROM users WHERE id = $1',
+      text: 'SELECT * FROM users WHERE id = $1',
       values: [user_id],
     };
 
@@ -80,7 +80,7 @@ class UserRepositoryPostgres extends UserRepository {
       throw new InvariantError('user tidak ditemukan');
     }
 
-    return result.rows[0].username;
+    return result.rows[0];
   }
 }
 
