@@ -1,4 +1,4 @@
-const Thread = require("../Thread");
+const NewThread = require("../NewThread");
 
 describe('a Thread entities', () => {
     it('should throw error when payload did not contain needed property', () => {
@@ -6,7 +6,7 @@ describe('a Thread entities', () => {
             title: 'abc',
         };
 
-        expect(() => new Thread(payload)).toThrowError('THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
+        expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     });
     
     it('should throw error when payload did not meet data type specification', () => {
@@ -15,7 +15,7 @@ describe('a Thread entities', () => {
             body: 'abc',
         };
 
-        expect(() => new Thread(payload)).toThrowError('THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
+        expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
     
     it('should throw error when title contains more than 50 character', () => {
@@ -24,7 +24,7 @@ describe('a Thread entities', () => {
             body: 'abc',
         };
 
-        expect(() => new Thread(payload)).toThrowError('THREAD.TITLE_LIMIT_CHAR');
+        expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.TITLE_LIMIT_CHAR');
     });
 
     it('should create thread object correctly', () => {
@@ -33,7 +33,7 @@ describe('a Thread entities', () => {
             body: 'isi thread 1',
         };
 
-        const { title, body } = new Thread(payload);
+        const { title, body } = new NewThread(payload);
 
         expect(title).toEqual(payload.title);
         expect(body).toEqual(payload.body);

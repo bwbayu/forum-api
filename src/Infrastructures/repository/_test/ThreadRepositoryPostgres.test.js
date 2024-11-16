@@ -1,7 +1,7 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
-const Thread = require('../../../Domains/threads/entities/Thread');
+const NewThread = require('../../../Domains/threads/entities/NewThread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres1 = require('../ThreadRepositoryPostgres');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
@@ -24,7 +24,7 @@ describe('ThreadRepositoryPostgres', () => {
 
     describe('addThread function', () => {
         it('should persist add thread and return added thread correctly', async () => {
-            const thread = new Thread({
+            const thread = new NewThread({
               title: 'thread 1',
               body: 'isi thread 1',
             });
@@ -41,7 +41,7 @@ describe('ThreadRepositoryPostgres', () => {
       
         it('should return thread correctly', async () => {
             // Arrange
-            const thread = new Thread({
+            const thread = new NewThread({
                 title: 'thread 1',
                 body: 'isi thread 1',
             });
