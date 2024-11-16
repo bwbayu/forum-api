@@ -5,6 +5,7 @@ const CommentRepositoryPostgres = require("../CommentRepositoryPostgres");
 const AddedComment = require("../../../Domains/comments/entities/AddedComment");
 const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const pool = require("../../database/postgres/pool");
+const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
 
 describe('CommentRepositoryPostgres', () => {
     const user_id = 'user-123';
@@ -35,21 +36,6 @@ describe('CommentRepositoryPostgres', () => {
 
             const comments = await CommentsTableTestHelper.findCommentById('comment-123');
             expect(comments).toHaveLength(1);
-            expect(addedComment).toStrictEqual(new AddedComment({
-                id: 'comment-123',
-                content: 'This is a comment',
-                user_id: 'user-123',
-            }));
-        });
-
-        it('should persist comment and return added comment correctly', async () => {
-            const commentContent = 'This is a comment';
-            const fakeIdGenerator = () => '123'; // stub!
-            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
-
-            const addedComment = await commentRepositoryPostgres.addComment(commentContent, thread_id, user_id);
-
-            const comments = await CommentsTableTestHelper.findCommentById('comment-123');
             expect(addedComment).toStrictEqual(new AddedComment({
                 id: 'comment-123',
                 content: 'This is a comment',
@@ -119,4 +105,31 @@ describe('CommentRepositoryPostgres', () => {
                 .toThrowError(NotFoundError);
         });
     });
+
+    describe('verifyCommentOwner function', () => {
+        it('should not throw any error if user is the owner of the comment', async () => {
+            await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+            await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', user_id))
+                .resolves
+                .not.toThrow();
+        })
+        it('should throw NotFoundError if comment id is not found', async () => {
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+            await expect(commentRepositoryPostgres.verifyCommentOwner('comment-999', user_id))
+                .rejects
+                .toThrowError(NotFoundError);
+        });
+
+        it('should throw AuthorizationError when user is not the owner of the comment', async () => {
+            await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
+            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+            await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-999'))
+                .rejects
+                .toThrowError(AuthorizationError);
+        });
+    })
 })
