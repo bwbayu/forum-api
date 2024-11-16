@@ -6,6 +6,7 @@ const AddedComment = require("../../../Domains/comments/entities/AddedComment");
 const NotFoundError = require("../../../Commons/exceptions/NotFoundError");
 const pool = require("../../database/postgres/pool");
 const AuthorizationError = require("../../../Commons/exceptions/AuthorizationError");
+const NewComment = require("../../../Domains/comments/entities/NewComment");
 
 describe('CommentRepositoryPostgres', () => {
     const user_id = 'user-123';
@@ -28,11 +29,15 @@ describe('CommentRepositoryPostgres', () => {
 
     describe('addComment function', () => {
         it('should persist comment and return added comment correctly', async () => {
-            const commentContent = 'This is a comment';
+            const comment = new NewComment({
+                content: 'This is a comment',
+                user_id,
+                thread_id,
+              });
             const fakeIdGenerator = () => '123'; // stub!
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
-            const addedComment = await commentRepositoryPostgres.addComment(commentContent, thread_id, user_id);
+            const addedComment = await commentRepositoryPostgres.addComment(comment);
 
             const comments = await CommentsTableTestHelper.findCommentById('comment-123');
             expect(comments).toHaveLength(1);

@@ -10,7 +10,8 @@ class CommentRepositoryPostgres extends CommentRepository {
         this._idGenerator = idGenerator;
     }
 
-    async addComment(content, thread_id, user_id){
+    async addComment(comment){
+        const {content, thread_id, user_id} = comment;
         const id = `comment-${this._idGenerator()}`;
         const created_at = new Date().toISOString();
         const is_delete = false;
@@ -24,11 +25,11 @@ class CommentRepositoryPostgres extends CommentRepository {
         return new AddedComment({ ...result.rows[0] });
     }
 
-    async deleteComment(id){
+    async deleteComment(comment_id){
         const content = '**komentar telah dihapus**'
         const query = {
             text: 'UPDATE comments SET content = $1, is_delete = true WHERE id = $2  RETURNING id;',
-            values: [content, id],
+            values: [content, comment_id],
         };
 
         const result = await this._pool.query(query);
@@ -53,10 +54,10 @@ class CommentRepositoryPostgres extends CommentRepository {
         return result.rows;
     }
 
-    async getCommentById(id){
+    async getCommentById(comment_id){
         const query = {
             text: 'SELECT * FROM comments WHERE id=$1;',
-            values: [id],
+            values: [comment_id],
         };
 
         const result = await this._pool.query(query);
@@ -68,10 +69,10 @@ class CommentRepositoryPostgres extends CommentRepository {
         return result.rows[0];
     }
 
-    async verifyCommentOwner(id, user_id) {
+    async verifyCommentOwner(comment_id, user_id) {
         const query = {
             text: 'SELECT id, user_id FROM comments WHERE id = $1;',
-            values: [id],
+            values: [comment_id],
         };
     
         const result = await this._pool.query(query);
