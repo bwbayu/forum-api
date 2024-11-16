@@ -4,7 +4,7 @@ const AddedThread = require('../../../Domains/threads/entities/AddedThread');
 const NewThread = require('../../../Domains/threads/entities/NewThread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres1 = require('../ThreadRepositoryPostgres');
-const InvariantError = require('../../../Commons/exceptions/InvariantError');
+const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 
 describe('ThreadRepositoryPostgres', () => {
     const user_id = 'user-123';
@@ -63,12 +63,12 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     describe('getThreadById function', () => {
-        it('should throw InvariantError if no thread found', async () => {
+        it('should throw NotFoundError if no thread found', async () => {
           // Arrange
           const threadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, {});
     
           // Action & Assert
-          await expect(threadRepositoryPostgres.getThreadById('thread-123')).rejects.toThrowError(InvariantError);
+          await expect(threadRepositoryPostgres.getThreadById('thread-123')).rejects.toThrowError(NotFoundError);
         });
     
         it('should return thread when id is found', async () => {
