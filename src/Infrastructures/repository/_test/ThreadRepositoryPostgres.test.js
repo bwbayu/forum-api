@@ -27,12 +27,13 @@ describe('ThreadRepositoryPostgres', () => {
             const thread = new NewThread({
               title: 'thread 1',
               body: 'isi thread 1',
+              user_id
             });
             const fakeIdGenerator = () => '123'; // stub!
             const ThreadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, fakeIdGenerator);
       
             // Action
-            await ThreadRepositoryPostgres.addThread(thread, user_id);
+            await ThreadRepositoryPostgres.addThread(thread);
             
             // Assert
             const threads = await ThreadsTableTestHelper.findThreadById('thread-123');
@@ -44,12 +45,13 @@ describe('ThreadRepositoryPostgres', () => {
             const thread = new NewThread({
                 title: 'thread 1',
                 body: 'isi thread 1',
+                user_id
             });
             const fakeIdGenerator = () => '123'; // stub!
             const ThreadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, fakeIdGenerator);
       
             // Action
-            const addedThread = await ThreadRepositoryPostgres.addThread(thread, user_id);
+            const addedThread = await ThreadRepositoryPostgres.addThread(thread);
       
             // Assert
             expect(addedThread).toStrictEqual(new AddedThread({

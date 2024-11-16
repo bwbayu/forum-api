@@ -13,6 +13,7 @@ describe('a Thread entities', () => {
         const payload = {
             title: 123,
             body: 'abc',
+            user_id: 'user-123'
         };
 
         expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -22,6 +23,7 @@ describe('a Thread entities', () => {
         const payload = {
             title: 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf',
             body: 'abc',
+            user_id: 'user-123'
         };
 
         expect(() => new NewThread(payload)).toThrowError('NEW_THREAD.TITLE_LIMIT_CHAR');
@@ -31,11 +33,13 @@ describe('a Thread entities', () => {
         const payload = {
             title: 'thread 1',
             body: 'isi thread 1',
+            user_id: 'user-123',
         };
 
-        const { title, body } = new NewThread(payload);
+        const { title, body, user_id } = new NewThread(payload);
 
         expect(title).toEqual(payload.title);
         expect(body).toEqual(payload.body);
+        expect(user_id).toEqual(payload.user_id);
     });
 })

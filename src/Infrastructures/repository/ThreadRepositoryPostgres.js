@@ -9,8 +9,8 @@ class ThreadRepositoryPostgres extends ThreadRepository {
         this._idGenerator = idGenerator;
     }
 
-    async addThread(thread, user_id){
-        const {title, body} = thread;
+    async addThread(thread){
+        const {title, body, user_id} = thread;
         const id = `thread-${this._idGenerator()}`;
         const created_at = new Date().toISOString();
 
