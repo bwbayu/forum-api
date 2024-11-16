@@ -1,4 +1,4 @@
-class Comment {
+class NewComment {
     constructor(payload){
         this._verifyPayload(payload);
         const {content} = payload;
@@ -8,13 +8,13 @@ class Comment {
 
     _verifyPayload({content}){
         if (!content) {
-            throw new Error('COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
+            throw new Error('NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
         }
 
         if (typeof content !== 'string') {
-            throw new Error('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+            throw new Error('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
     }
 }
 
-module.exports = Comment;
+module.exports = NewComment;

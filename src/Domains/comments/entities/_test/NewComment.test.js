@@ -1,10 +1,10 @@
-const Comment = require("../Comment");
+const NewComment = require("../NewComment");
 
 describe('a Comment entity', () => {
     it('should throw error when payload did not contain needed property', () => {
         const payload = {};
 
-        expect(() => new Comment(payload)).toThrowError('COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
+        expect(() => new NewComment(payload)).toThrowError('COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     });
 
     it('should throw error when payload did not meet data type specification', () => {
@@ -12,7 +12,7 @@ describe('a Comment entity', () => {
             content: 123,
         };
 
-        expect(() => new Comment(payload)).toThrowError('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
+        expect(() => new NewComment(payload)).toThrowError('COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
     it('should create comment object correctly', () => {
@@ -20,7 +20,7 @@ describe('a Comment entity', () => {
             content: 'ini komentar',
         };
 
-        const comment = new Comment(payload);
+        const comment = new NewComment(payload);
 
         expect(comment.content).toEqual(payload.content);
     });
