@@ -20,7 +20,10 @@ class ThreadsHandler{
         const response = h.response({
             status: 'success',
             data: {
-                addedThread,
+                addedThread: {
+                    ...addedThread,
+                    owner: addedThread.user_id,
+                },
             },
         });
         response.code(201);

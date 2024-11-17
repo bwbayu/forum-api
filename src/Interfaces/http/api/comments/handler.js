@@ -22,7 +22,10 @@ class CommentsHandler{
         const response = h.response({
             status: 'success',
             data: {
-                addedComment,
+                addedComment: {
+                    ...addedComment,
+                    owner: addedComment.user_id,
+                },
             },
         });
         response.code(201);
