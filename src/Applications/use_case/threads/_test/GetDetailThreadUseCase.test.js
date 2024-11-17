@@ -36,8 +36,8 @@ describe('GetDetailThreadUseCase', () => {
         };
 
         const getDetailThreadUseCase = new GetDetailThreadUseCase({
-            ThreadRepository: mockThreadRepository,
-            CommentRepository: mockCommentRepository,
+            threadRepository: mockThreadRepository,
+            commentRepository: mockCommentRepository,
         });
 
         // Act
@@ -81,8 +81,8 @@ describe('GetDetailThreadUseCase', () => {
         };
 
         const getDetailThreadUseCase = new GetDetailThreadUseCase({
-            ThreadRepository: mockThreadRepository,
-            CommentRepository: mockCommentRepository,
+            threadRepository: mockThreadRepository,
+            commentRepository: mockCommentRepository,
         });
 
         // Act

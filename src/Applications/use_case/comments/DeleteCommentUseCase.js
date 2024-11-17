@@ -1,7 +1,7 @@
 class DeleteCommentUseCase{
-    constructor({CommentRepository, ThreadRepository}){
-        this._commentRepository = CommentRepository;
-        this._threadRepository = ThreadRepository;
+    constructor({commentRepository, threadRepository}){
+        this._commentRepository = commentRepository;
+        this._threadRepository = threadRepository;
     }
 
     async execute(useCasePayload){

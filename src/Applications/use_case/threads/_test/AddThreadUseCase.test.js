@@ -3,35 +3,34 @@ const AddThreadUseCase = require("../AddThreadUseCase");
 const AddedThread = require('../../../../Domains/threads/entities/AddedThread');
 
 describe('AddThreadUseCase', () => {
-    it('should orchestrating the add thread action correctly', async () => {
-        const useCasePayload = {
-            title: 'thread 1',
-            body: 'isi thread 1',
-            user_id: 'user-123'
-        };
+  it('should orchestrating the add thread action correctly', async () => {
+    const useCasePayload = {
+      title: 'thread 1',
+      body: 'isi thread 1',
+      user_id: 'user-123'
+    };
 
-        const mockAddedThread = new AddedThread({
-            id: 'thread-123',
-            title: useCasePayload.title,
-            user_id: useCasePayload.user_id,
-        });
+    const mockAddedThread = new AddedThread({
+      id: 'thread-123',
+      title: useCasePayload.title,
+      user_id: useCasePayload.user_id,
+    });
 
-        const mockThreadRepository = new ThreadRepository();
-        mockThreadRepository.addThread = jest.fn()
-        .mockImplementation(() => Promise.resolve(mockAddedThread));
+    const mockThreadRepository = new ThreadRepository();
+    mockThreadRepository.addThread = jest.fn()
+      .mockResolvedValue(mockAddedThread);
 
-        // use case instance
-        const getThreadUseCase = new AddThreadUseCase({
-            ThreadRepository: mockThreadRepository,
-        });
+    const addThreadUseCase = new AddThreadUseCase({
+      threadRepository: mockThreadRepository,
+    });
 
-        const addedThread = await getThreadUseCase.execute(useCasePayload);
+    const addedThread = await addThreadUseCase.execute(useCasePayload);
 
-        // 
-        expect(addedThread).toStrictEqual(new AddedThread({
-            id: 'thread-123',
-            title: useCasePayload.title,
-            user_id: useCasePayload.user_id,
-        }));
-    })
+    expect(mockThreadRepository.addThread).toHaveBeenCalledWith(expect.any(Object));
+    expect(addedThread).toStrictEqual(new AddedThread({
+      id: 'thread-123',
+      title: useCasePayload.title,
+      user_id: useCasePayload.user_id,
+    }));
+  });
 });

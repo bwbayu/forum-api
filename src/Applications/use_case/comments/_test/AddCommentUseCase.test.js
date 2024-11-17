@@ -32,9 +32,9 @@ describe('AddCommentUseCase', () => {
             .mockImplementation(() => Promise.resolve(mockAddedComment));
 
         const addCommentUseCase = new AddCommentUseCase({
-            CommentRepository: mockCommentRepository,
-            ThreadRepository: mockThreadRepository,
-            UserRepository: mockUserRepository,
+            commentRepository: mockCommentRepository,
+            threadRepository: mockThreadRepository,
+            userRepository: mockUserRepository,
         });
 
         const addedComment = await addCommentUseCase.execute(useCasePayload);

@@ -2,9 +2,9 @@ const DetailComment = require("../../../Domains/comments/entities/DetailComment"
 const DetailThread = require("../../../Domains/threads/entities/DetailThread");
 
 class GetDetailThreadUseCase{
-    constructor({ThreadRepository, CommentRepository}){
-        this._threadRepository = ThreadRepository;
-        this._commentRepository = CommentRepository;
+    constructor({threadRepository, commentRepository}){
+        this._threadRepository = threadRepository;
+        this._commentRepository = commentRepository;
     }
 
     async execute(useCasePayload){

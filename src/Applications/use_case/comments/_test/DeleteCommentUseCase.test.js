@@ -50,8 +50,8 @@ describe('DeleteCommentUseCase', () => {
             .mockImplementation(() => Promise.resolve());
 
         const deleteCommentUseCase = new DeleteCommentUseCase({
-            CommentRepository: mockCommentRepository,
-            ThreadRepository: mockThreadRepository
+            commentRepository: mockCommentRepository,
+            threadRepository: mockThreadRepository
         });
 
         await deleteCommentUseCase.execute(useCasePayload);
