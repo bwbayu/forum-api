@@ -70,19 +70,13 @@ class CommentRepositoryPostgres extends CommentRepository {
 
     async verifyCommentOwner(comment_id, user_id) {
         const query = {
-            text: 'SELECT id, user_id FROM comments WHERE id = $1;',
-            values: [comment_id],
+            text: 'SELECT * FROM comments WHERE id = $1 AND user_id = $2;',
+            values: [comment_id, user_id],
         };
     
         const result = await this._pool.query(query);
     
         if (!result.rowCount) {
-            throw new NotFoundError('Comment not found.');
-        }
-    
-        const comment = result.rows[0];
-    
-        if (comment.user_id !== user_id) {
             throw new AuthorizationError('You do not have access to delete this comment.');
         }
     }

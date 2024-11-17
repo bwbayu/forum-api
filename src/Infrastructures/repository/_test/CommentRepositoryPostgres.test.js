@@ -120,13 +120,6 @@ describe('CommentRepositoryPostgres', () => {
                 .resolves
                 .not.toThrow();
         })
-        it('should throw NotFoundError if comment id is not found', async () => {
-            const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-
-            await expect(commentRepositoryPostgres.verifyCommentOwner('comment-999', user_id))
-                .rejects
-                .toThrowError(NotFoundError);
-        });
 
         it('should throw AuthorizationError when user is not the owner of the comment', async () => {
             await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
