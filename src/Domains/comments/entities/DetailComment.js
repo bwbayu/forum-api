@@ -16,7 +16,7 @@ class DetailComment {
 
         if (typeof id !== 'string' ||
             typeof content !== 'string' ||
-            typeof date !== 'string' ||
+            !(date instanceof Date || typeof date === 'string') ||
             typeof username !== 'string') {
             throw new Error('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }

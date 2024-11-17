@@ -16,9 +16,9 @@ class GetDetailThreadUseCase{
             body: thread.body,
             date: thread.date,
             username: thread.username,
-            comments: [],
+            comments: comments,
         });
-
+        
         if (comments.length > 0) {
             for (const comment of comments) {
                 const commentDetail = new DetailComment({
@@ -31,9 +31,7 @@ class GetDetailThreadUseCase{
             }
         }
 
-        return {
-            thread: detailThread,
-        };
+        return detailThread;
     }
 }
 
