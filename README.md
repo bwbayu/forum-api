@@ -1,9 +1,9 @@
 TASK : 
 - ~~Registrasi Pengguna;~~
 - ~~Login dan Logout;~~
-- Menambahkan Thread;
-- Melihat Thread;
-- Menambahkan dan Menghapus Komentar pada Thread; serta
+- ~~Menambahkan Thread;~~
+- ~~Melihat Thread;~~
+- ~~Menambahkan dan Menghapus Komentar pada Thread;~~ serta
 - Menambahkan dan Menghapus Balasan Komentar Thread (opsional).
 
 # Set Up Database
