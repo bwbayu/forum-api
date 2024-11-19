@@ -68,7 +68,7 @@ class UserRepositoryPostgres extends UserRepository {
     return id;
   }
 
-  async getUserById(user_id){
+  async getUserById(user_id) {
     const query = {
       text: 'SELECT * FROM users WHERE id = $1',
       values: [user_id],

@@ -1,5 +1,5 @@
 const createServer = require('../createServer');
-
+/* eslint-disable no-undef */
 describe('HTTP server', () => {
   it('should response 404 when request unregistered route', async () => {
     // Arrange

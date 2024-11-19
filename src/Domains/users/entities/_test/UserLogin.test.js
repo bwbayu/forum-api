@@ -1,5 +1,5 @@
 const UserLogin = require('../UserLogin');
-
+/* eslint-disable no-undef */
 describe('UserLogin entities', () => {
   it('should throw error when payload does not contain needed property', () => {
     // Arrange

@@ -1,5 +1,6 @@
-const ThreadRepository = require("../../../../Domains/threads/ThreadRepository");
-const AddThreadUseCase = require("../AddThreadUseCase");
+/* eslint-disable no-undef */
+const ThreadRepository = require('../../../../Domains/threads/ThreadRepository');
+const AddThreadUseCase = require('../AddThreadUseCase');
 const AddedThread = require('../../../../Domains/threads/entities/AddedThread');
 
 describe('AddThreadUseCase', () => {
@@ -7,7 +8,7 @@ describe('AddThreadUseCase', () => {
     const useCasePayload = {
       title: 'thread 1',
       body: 'isi thread 1',
-      user_id: 'user-123'
+      user_id: 'user-123',
     };
 
     const mockAddedThread = new AddedThread({

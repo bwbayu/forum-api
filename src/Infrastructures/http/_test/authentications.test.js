@@ -4,7 +4,7 @@ const AuthenticationsTableTestHelper = require('../../../../tests/Authentication
 const container = require('../../container');
 const createServer = require('../createServer');
 const AuthenticationTokenManager = require('../../../Applications/security/AuthenticationTokenManager');
-
+/* eslint-disable no-undef */
 describe('/authentications endpoint', () => {
   afterAll(async () => {
     await pool.end();

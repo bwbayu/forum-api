@@ -106,7 +106,7 @@ container.register([
         },
       ],
     },
-  },  
+  },
   {
     key: CommentRepository.name,
     Class: CommentRepositoryPostgres,

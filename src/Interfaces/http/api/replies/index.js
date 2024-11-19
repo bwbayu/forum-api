@@ -1,10 +1,10 @@
-const RepliesHandler = require("./handler");
-const routes = require("./route");
+const RepliesHandler = require('./handler');
+const routes = require('./route');
 
 module.exports = {
-    name: 'replies',
-    register: async (server, {container}) => {
-        const repliesHandler = new RepliesHandler(container);
-        server.route(routes(repliesHandler));
-    }
-}
+  name: 'replies',
+  register: async (server, { container }) => {
+    const repliesHandler = new RepliesHandler(container);
+    server.route(routes(repliesHandler));
+  },
+};

@@ -1,5 +1,5 @@
 const UserRepository = require('../UserRepository');
-
+/* eslint-disable no-undef */
 describe('UserRepository interface', () => {
   it('should throw error when invoke abstract behavior', async () => {
     // Arrange

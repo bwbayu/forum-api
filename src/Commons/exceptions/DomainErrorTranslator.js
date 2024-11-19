@@ -25,31 +25,33 @@ DomainErrorTranslator._directories = {
   'NEW_THREAD.TITLE_LIMIT_CHAR': new InvariantError('panjang judul tidak boleh lebih dari 50'),
   'DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat detail thread baru karena data tidak lengkap'),
   'DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
-    'tidak dapat membuat detail thread baru karena tipe data tidak sesuai'
+    'tidak dapat membuat detail thread baru karena tipe data tidak sesuai',
   ),
   // comment error
   'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'tidak dapat membuat komentar baru karena data tidak lengkap'),
+    'tidak dapat membuat komentar baru karena data tidak lengkap',
+  ),
   'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'tidak dapat membuat komentar baru karena tipe data tidak sesuai',
   ),
   'COMMENT_DETAILS.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'tidak dapat membuat detail komentar baru karena data tidak lengkap'
+    'tidak dapat membuat detail komentar baru karena data tidak lengkap',
   ),
   'COMMENT_DETAILS.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
-    'tidak dapat membuat detail komentar baru karena tipe data tidak sesuai'
+    'tidak dapat membuat detail komentar baru karena tipe data tidak sesuai',
   ),
   // reply error
   'NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'tidak dapat membuat balasan baru karena data tidak lengkap'),
+    'tidak dapat membuat balasan baru karena data tidak lengkap',
+  ),
   'NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
     'tidak dapat membuat balasan baru karena tipe data tidak sesuai',
   ),
   'DETAIL_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError(
-    'tidak dapat membuat detail balasan baru karena data tidak lengkap'
+    'tidak dapat membuat detail balasan baru karena data tidak lengkap',
   ),
   'DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError(
-    'tidak dapat membuat detail balasan baru karena tipe data tidak sesuai'
+    'tidak dapat membuat detail balasan baru karena tipe data tidak sesuai',
   ),
 };
 

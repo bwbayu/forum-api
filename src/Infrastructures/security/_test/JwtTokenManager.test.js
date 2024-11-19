@@ -1,7 +1,7 @@
 const Jwt = require('@hapi/jwt');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const JwtTokenManager = require('../JwtTokenManager');
-
+/* eslint-disable no-undef */
 describe('JwtTokenManager', () => {
   describe('createAccessToken function', () => {
     it('should create accessToken correctly', async () => {

@@ -2,7 +2,7 @@ const pool = require('../../database/postgres/pool');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
-
+/* eslint-disable no-undef */
 describe('/users endpoint', () => {
   afterAll(async () => {
     await pool.end();
