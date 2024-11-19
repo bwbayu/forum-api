@@ -17,6 +17,7 @@ describe('a DetailComment entity', () => {
             content: 'This is a comment',
             date: '2024-11-15',
             username: 123,
+            replies: [],
         };
 
         expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -27,14 +28,16 @@ describe('a DetailComment entity', () => {
             id: 'comment-123',
             content: 'This is a comment',
             date: '2024-11-15',
-            username: 'user-123'
+            username: 'user-123',
+            replies: [],
         };
 
         const detailComment = new DetailComment(payload);
 
-        expect(detailComment.id).toEqual(payload.id);
-        expect(detailComment.content).toEqual(payload.content);
-        expect(detailComment.date).toEqual(payload.date);
-        expect(detailComment.username).toEqual(payload.username);
+        expect(detailComment.id).toEqual('comment-123');
+        expect(detailComment.content).toEqual('This is a comment');
+        expect(detailComment.date).toEqual('2024-11-15');
+        expect(detailComment.username).toEqual('user-123');
+        expect(detailComment.replies).toEqual([]);
     });
 });
