@@ -11,13 +11,47 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 /* eslint-disable no-undef */
 describe('ReplyRepositoryPostgres', () => {
   const user_id = 'user-123';
-  const thread_id = 'thread-123';
-  const comment_id = 'comment-123';
+  const threadPayload = {
+    id: 'thread-123',
+    user_id,
+    title: 'thread 1',
+    body: 'isi thread 1',
+    created_at: new Date().toISOString(),
+  }
+
+  const commentPayload = {
+    id: 'comment-123',
+    thread_id: threadPayload.id,
+    user_id,
+    content: 'This is a comment',
+    created_at: new Date().toISOString(),
+    is_delete: false,
+  }
+
+  const replyPayload1 = {
+    id: 'reply-123',
+    thread_id: threadPayload.id,
+    user_id,
+    comment_id: commentPayload.id,
+    content: 'This is a reply comment',
+    created_at: new Date().toISOString(),
+    is_delete: false,
+  }
+
+  const replyPayload2 = {
+    id: 'reply-124',
+    thread_id: threadPayload.id,
+    user_id,
+    comment_id: commentPayload.id,
+    content: 'This is a reply comment 2',
+    created_at: new Date().toISOString(),
+    is_delete: false,
+  }
 
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({ id: user_id });
-    await ThreadsTableTestHelper.addThread({ id: thread_id, user_id });
-    await CommentsTableTestHelper.addComment({ id: comment_id, user_id, thread_id });
+    await ThreadsTableTestHelper.addThread(threadPayload);
+    await CommentsTableTestHelper.addComment(commentPayload);
   });
 
   afterEach(async () => {
@@ -36,8 +70,8 @@ describe('ReplyRepositoryPostgres', () => {
       const reply = new NewReply({
         content: 'This is a reply comment',
         user_id,
-        thread_id,
-        comment_id,
+        thread_id: threadPayload.id,
+        comment_id: commentPayload.id,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, fakeIdGenerator);
@@ -56,9 +90,7 @@ describe('ReplyRepositoryPostgres', () => {
 
   describe('deleteReply function', () => {
     it('should mark reply as deleted', async () => {
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-123', thread_id, user_id, comment_id,
-      });
+      await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       await replyRepositoryPostgres.deleteReply('reply-123');
@@ -78,15 +110,11 @@ describe('ReplyRepositoryPostgres', () => {
 
   describe('getReplyByCommentId function', () => {
     it('should return replies by comment id', async () => {
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-123', thread_id, user_id, comment_id, content: 'This is a reply comment',
-      });
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-124', thread_id, user_id, comment_id, content: 'This is a reply comment 2',
-      });
+      await RepliesTableTestHelper.addReply(replyPayload1);
+      await RepliesTableTestHelper.addReply(replyPayload2);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
-      const replies = await replyRepositoryPostgres.getReplyByCommentId(comment_id);
+      const replies = await replyRepositoryPostgres.getReplyByCommentId(commentPayload.id);
 
       expect(replies).toHaveLength(2);
     });
@@ -102,9 +130,7 @@ describe('ReplyRepositoryPostgres', () => {
 
   describe('getReplyById function', () => {
     it('should return the reply details when id is found', async () => {
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-123', thread_id, user_id, comment_id, content: 'This is a reply comment',
-      });
+      await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       const replies = await replyRepositoryPostgres.getReplyById('reply-123');
@@ -124,9 +150,7 @@ describe('ReplyRepositoryPostgres', () => {
 
   describe('verifyReplyOwner function', () => {
     it('should not throw any error if user is the owner of the reply', async () => {
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-123', thread_id, user_id, comment_id,
-      });
+      await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', user_id))
@@ -135,9 +159,7 @@ describe('ReplyRepositoryPostgres', () => {
     });
 
     it('should throw AuthorizationError when user is not the owner of the reply', async () => {
-      await RepliesTableTestHelper.addReply({
-        id: 'reply-123', thread_id, user_id, comment_id,
-      });
+      await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', 'user-999'))

@@ -72,8 +72,15 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should return thread when id is found', async () => {
+      const threadPayload = {
+        id: 'thread-123',
+        user_id,
+        title: 'thread 1',
+        body: 'isi thread 1',
+        created_at: new Date().toISOString(),
+      }
       // Arrange
-      await ThreadsTableTestHelper.addThread({ id: 'thread-123', title: 'thread 1' });
+      await ThreadsTableTestHelper.addThread(threadPayload);
       const threadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, {});
 
       // Action

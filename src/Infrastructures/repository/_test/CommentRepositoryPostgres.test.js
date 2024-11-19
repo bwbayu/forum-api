@@ -10,11 +10,35 @@ const NewComment = require('../../../Domains/comments/entities/NewComment');
 /* eslint-disable no-undef */
 describe('CommentRepositoryPostgres', () => {
   const user_id = 'user-123';
-  const thread_id = 'thread-123';
+  const threadPayload = {
+    id: 'thread-123',
+    user_id,
+    title: 'thread 1',
+    body: 'isi thread 1',
+    created_at: new Date().toISOString(),
+  }
+
+  const commentPayload = {
+    id: 'comment-123',
+    thread_id: threadPayload.id,
+    user_id,
+    content: 'This is a comment',
+    created_at: new Date().toISOString(),
+    is_delete: false,
+  }
+
+  const commentPayload2 = {
+    id: 'comment-124',
+    thread_id: threadPayload.id,
+    user_id,
+    content: 'This is a comment 2',
+    created_at: new Date().toISOString(),
+    is_delete: false,
+  }
 
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({ id: user_id });
-    await ThreadsTableTestHelper.addThread({ id: thread_id, user_id });
+    await ThreadsTableTestHelper.addThread(threadPayload);
   });
 
   afterEach(async () => {
@@ -32,7 +56,7 @@ describe('CommentRepositoryPostgres', () => {
       const comment = new NewComment({
         content: 'This is a comment',
         user_id,
-        thread_id,
+        thread_id: threadPayload.id,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
@@ -51,7 +75,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('deleteComment function', () => {
     it('should mark comment as deleted', async () => {
-      await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
+      await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await commentRepositoryPostgres.deleteComment('comment-123');
@@ -71,15 +95,11 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('getCommentByThreadId function', () => {
     it('should return comments by thread ID', async () => {
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-123', thread_id, user_id, content: 'This is a comment',
-      });
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-124', thread_id, user_id, content: 'This is a comment 2',
-      });
+      await CommentsTableTestHelper.addComment(commentPayload);
+      await CommentsTableTestHelper.addComment(commentPayload2);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
-      const comments = await commentRepositoryPostgres.getCommentByThreadId(thread_id);
+      const comments = await commentRepositoryPostgres.getCommentByThreadId(threadPayload.id);
 
       expect(comments).toHaveLength(2);
     });
@@ -95,9 +115,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('getCommentById function', () => {
     it('should return the comment details when id is found', async () => {
-      await CommentsTableTestHelper.addComment({
-        id: 'comment-123', thread_id, user_id, content: 'This is a comment',
-      });
+      await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       const comment = await commentRepositoryPostgres.getCommentById('comment-123');
@@ -117,7 +135,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('verifyCommentOwner function', () => {
     it('should not throw any error if user is the owner of the comment', async () => {
-      await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
+      await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', user_id))
@@ -126,7 +144,7 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should throw AuthorizationError when user is not the owner of the comment', async () => {
-      await CommentsTableTestHelper.addComment({ id: 'comment-123', thread_id, user_id });
+      await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', 'user-999'))
