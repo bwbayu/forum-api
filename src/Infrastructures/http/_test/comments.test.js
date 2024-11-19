@@ -92,7 +92,7 @@ describe('/comments endpoint', () => {
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.addedComment).toBeDefined();
-      expect(responseJson.data.addedComment.content).toEqual(commentPayload.content);
+      expect(responseJson.data.addedComment.content).toEqual('komentar pertama');
     });
 
     it('should response 400 if payload not contain needed property', async () => {

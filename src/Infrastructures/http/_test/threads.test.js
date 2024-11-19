@@ -166,8 +166,8 @@ describe('/threads endpoint', () => {
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.thread.id).toEqual(threadData.id);
-      expect(responseJson.data.thread.title).toEqual(threadPayload.title);
-      expect(responseJson.data.thread.body).toEqual(threadPayload.body);
+      expect(responseJson.data.thread.title).toEqual('thread 1');
+      expect(responseJson.data.thread.body).toEqual('isi thread 1');
       expect(responseJson.data.thread.username).toEqual('dicoding');
       expect(Array.isArray(responseJson.data.thread.comments)).toBe(true);
     });
