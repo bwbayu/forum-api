@@ -1,0 +1,17 @@
+# Alur Kerja Program - Clean Arsitektur
+1. Controller (/Interfaces/http/api)
+- route.js = menerima url dan menentukan fungsi handler yang akan menerima request dari url
+- handler.js = menerima request, berkomunikasi dengan use case terkait dengan menyiapkan payload yang dibutuhkan use case tersebut, kemudian menjalankan use case tersebut, menerima data dari use case dan melanjutkannya untuk digunakan di FE
+
+2. Use Case (/Applications/use_case)
+- Tempat membuat logika bisnis yang dibutuhkan, seperti jika ingin dapat membuat dan menghapus comment, maka dibuat file use case untuk add comment dan delete comment.
+
+- Use case berkomunikasi dengan controller untuk menerima payload yang dikirimkan dan repository/database untuk melakukan aksi yang berkaitan dengan database, seperti mengecek apakah thread tertentu ada di db atau tidak menggunakan data yang diterima dari payload controller.
+
+- pada layer use case juga dapat melakukan validasi payload yang di terima dari controller terlebih dahulu, seperti pada DeleteCommentUseCase.js. untuk melakukan validasi bisa membuat khusus untuk use case tersebut atau menggunakan validasi data bisnis menggunakan entity.
+
+3. Repository/Database (/Infrastructures/repository)
+- tempat berkomunikasi dengan database menggunakan query dan mengembalikan data yang dibutuhkan oleh use case
+
+4. Entity (/Domains/comments/entities)
+- tempat untuk menyimpan data bisnis dan melakukan validasi terhadap data tersebut untuk memastikan kelengkapan data dan konsistensi tipe data
