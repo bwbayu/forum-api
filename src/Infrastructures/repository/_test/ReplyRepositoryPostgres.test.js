@@ -10,10 +10,10 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 /* eslint-disable no-undef */
 describe('ReplyRepositoryPostgres', () => {
-  const user_id = 'user-123';
+  const owner = 'user-123';
   const threadPayload = {
     id: 'thread-123',
-    user_id,
+    owner,
     title: 'thread 1',
     body: 'isi thread 1',
     created_at: new Date().toISOString(),
@@ -22,7 +22,7 @@ describe('ReplyRepositoryPostgres', () => {
   const commentPayload = {
     id: 'comment-123',
     thread_id: threadPayload.id,
-    user_id,
+    owner,
     content: 'This is a comment',
     created_at: new Date().toISOString(),
     is_delete: false,
@@ -31,7 +31,7 @@ describe('ReplyRepositoryPostgres', () => {
   const replyPayload1 = {
     id: 'reply-123',
     thread_id: threadPayload.id,
-    user_id,
+    owner,
     comment_id: commentPayload.id,
     content: 'This is a reply comment',
     created_at: new Date().toISOString(),
@@ -41,7 +41,7 @@ describe('ReplyRepositoryPostgres', () => {
   const replyPayload2 = {
     id: 'reply-124',
     thread_id: threadPayload.id,
-    user_id,
+    owner,
     comment_id: commentPayload.id,
     content: 'This is a reply comment 2',
     created_at: new Date().toISOString(),
@@ -49,7 +49,7 @@ describe('ReplyRepositoryPostgres', () => {
   }
 
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({ id: user_id });
+    await UsersTableTestHelper.addUser({ id: owner });
     await ThreadsTableTestHelper.addThread(threadPayload);
     await CommentsTableTestHelper.addComment(commentPayload);
   });
@@ -69,7 +69,7 @@ describe('ReplyRepositoryPostgres', () => {
     it('should persist reply comment and return added reply comment correctly', async () => {
       const reply = new NewReply({
         content: 'This is a reply comment',
-        user_id,
+        owner,
         thread_id: threadPayload.id,
         comment_id: commentPayload.id,
       });
@@ -83,7 +83,7 @@ describe('ReplyRepositoryPostgres', () => {
       expect(addedReply).toStrictEqual(new AddedReply({
         id: 'reply-123',
         content: 'This is a reply comment',
-        user_id: 'user-123',
+        owner: 'user-123',
       }));
     });
   });
@@ -153,7 +153,7 @@ describe('ReplyRepositoryPostgres', () => {
       await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
-      await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', user_id))
+      await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', owner))
         .resolves
         .not.toThrow();
     });

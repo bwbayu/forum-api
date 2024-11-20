@@ -9,10 +9,10 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 const NewComment = require('../../../Domains/comments/entities/NewComment');
 /* eslint-disable no-undef */
 describe('CommentRepositoryPostgres', () => {
-  const user_id = 'user-123';
+  const owner = 'user-123';
   const threadPayload = {
     id: 'thread-123',
-    user_id,
+    owner,
     title: 'thread 1',
     body: 'isi thread 1',
     created_at: new Date().toISOString(),
@@ -21,7 +21,7 @@ describe('CommentRepositoryPostgres', () => {
   const commentPayload = {
     id: 'comment-123',
     thread_id: threadPayload.id,
-    user_id,
+    owner,
     content: 'This is a comment',
     created_at: new Date().toISOString(),
     is_delete: false,
@@ -30,14 +30,14 @@ describe('CommentRepositoryPostgres', () => {
   const commentPayload2 = {
     id: 'comment-124',
     thread_id: threadPayload.id,
-    user_id,
+    owner,
     content: 'This is a comment 2',
     created_at: new Date().toISOString(),
     is_delete: false,
   }
 
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({ id: user_id });
+    await UsersTableTestHelper.addUser({ id: owner });
     await ThreadsTableTestHelper.addThread(threadPayload);
   });
 
@@ -55,7 +55,7 @@ describe('CommentRepositoryPostgres', () => {
     it('should persist comment and return added comment correctly', async () => {
       const comment = new NewComment({
         content: 'This is a comment',
-        user_id,
+        owner,
         thread_id: threadPayload.id,
       });
       const fakeIdGenerator = () => '123'; // stub!
@@ -68,7 +68,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(addedComment).toStrictEqual(new AddedComment({
         id: 'comment-123',
         content: 'This is a comment',
-        user_id: 'user-123',
+        owner: 'user-123',
       }));
     });
   });
@@ -138,7 +138,7 @@ describe('CommentRepositoryPostgres', () => {
       await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
-      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', user_id))
+      await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', owner))
         .resolves
         .not.toThrow();
     });

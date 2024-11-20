@@ -1,19 +1,19 @@
 class AddedComment {
   constructor(payload) {
     this._verifyPayload(payload);
-    const { id, content, user_id } = payload;
+    const { id, content, owner } = payload;
 
     this.id = id;
     this.content = content;
-    this.user_id = user_id;
+    this.owner = owner;
   }
 
-  _verifyPayload({ id, content, user_id }) {
-    if (!id || !content || !user_id) {
+  _verifyPayload({ id, content, owner }) {
+    if (!id || !content || !owner) {
       throw new Error('ADDED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
-    if (typeof id !== 'string' || typeof content !== 'string' || typeof user_id !== 'string') {
+    if (typeof id !== 'string' || typeof content !== 'string' || typeof owner !== 'string') {
       throw new Error('ADDED_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }

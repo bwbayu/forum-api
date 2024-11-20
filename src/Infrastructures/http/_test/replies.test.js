@@ -112,7 +112,6 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
-      expect(responseJson.data.addedReply).toBeDefined();
       expect(responseJson.data.addedReply.content).toEqual('balasan komentar pertama');
     });
 
@@ -219,7 +218,7 @@ describe('/replies endpoint', () => {
           Authorization: `Bearer ${accessToken2}`,
         },
       });
-
+      
       // get reply id from above reply and user 1 will trying to delete it
       const reply_id = JSON.parse(replyResponse.payload).data.addedReply.id;
 

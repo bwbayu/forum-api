@@ -7,10 +7,10 @@ const ThreadRepositoryPostgres1 = require('../ThreadRepositoryPostgres');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 /* eslint-disable no-undef */
 describe('ThreadRepositoryPostgres', () => {
-  const user_id = 'user-123';
+  const owner = 'user-123';
 
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({ id: user_id });
+    await UsersTableTestHelper.addUser({ id: owner });
   });
 
   afterEach(async () => {
@@ -27,7 +27,7 @@ describe('ThreadRepositoryPostgres', () => {
       const thread = new NewThread({
         title: 'thread 1',
         body: 'isi thread 1',
-        user_id,
+        owner,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const ThreadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, fakeIdGenerator);
@@ -45,7 +45,7 @@ describe('ThreadRepositoryPostgres', () => {
       const thread = new NewThread({
         title: 'thread 1',
         body: 'isi thread 1',
-        user_id,
+        owner,
       });
       const fakeIdGenerator = () => '123'; // stub!
       const ThreadRepositoryPostgres = new ThreadRepositoryPostgres1(pool, fakeIdGenerator);
@@ -57,7 +57,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(addedThread).toStrictEqual(new AddedThread({
         id: 'thread-123',
         title: 'thread 1',
-        user_id: 'user-123',
+        owner: 'user-123',
       }));
     });
   });
@@ -74,7 +74,7 @@ describe('ThreadRepositoryPostgres', () => {
     it('should return thread when id is found', async () => {
       const threadPayload = {
         id: 'thread-123',
-        user_id,
+        owner,
         title: 'thread 1',
         body: 'isi thread 1',
         created_at: new Date().toISOString(),

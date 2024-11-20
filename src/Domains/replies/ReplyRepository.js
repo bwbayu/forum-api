@@ -16,7 +16,7 @@ class ReplyRepository {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 
-  async verifyReplyOwner(reply_id, user_id) {
+  async verifyReplyOwner(reply_id, owner) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
 }

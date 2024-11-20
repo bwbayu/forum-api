@@ -13,14 +13,14 @@ describe('AddReplyUseCase', () => {
   const useCasePayload = {
     content: 'This is a reply comment',
     thread_id: 'thread-123',
-    user_id: 'user-123',
+    owner: 'user-123',
     comment_id: 'comment-123',
   };
 
   const mockAddedReply = new AddedReply({
     id: 'reply-123',
     content: useCasePayload.content,
-    user_id: useCasePayload.user_id,
+    owner: useCasePayload.owner,
   });
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('AddReplyUseCase', () => {
 
     mockCommentRepository.getCommentById = jest.fn().mockResolvedValue({ id: useCasePayload.comment_id });
     mockThreadRepository.getThreadById = jest.fn().mockResolvedValue({ id: useCasePayload.thread_id });
-    mockUserRepository.getUserById = jest.fn().mockResolvedValue({ id: useCasePayload.user_id });
+    mockUserRepository.getUserById = jest.fn().mockResolvedValue({ id: useCasePayload.owner });
     mockReplyRepository.addReply = jest.fn().mockResolvedValue(mockAddedReply);
 
     addReplyUseCase = new AddReplyUseCase({
@@ -50,10 +50,10 @@ describe('AddReplyUseCase', () => {
     expect(mockCommentRepository.getCommentById).toHaveBeenCalledWith('comment-123');
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith('thread-123');
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-123');
-    expect(addedReply).toEqual(new AddedReply({
+    expect(addedReply.addedReply).toEqual(new AddedReply({
       id: 'reply-123',
       content: 'This is a reply comment',
-      user_id: 'user-123',
+      owner: 'user-123',
     }));
   });
 });

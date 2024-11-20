@@ -12,15 +12,15 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async addReply(reply) {
     const {
-      content, thread_id, user_id, comment_id,
+      content, thread_id, owner, comment_id,
     } = reply;
     const id = `reply-${this._idGenerator()}`;
     const created_at = new Date().toISOString();
     const is_delete = false;
 
     const query = {
-      text: 'INSERT INTO replies VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, user_id;',
-      values: [id, thread_id, user_id, comment_id, content, created_at, is_delete],
+      text: 'INSERT INTO replies VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, owner;',
+      values: [id, thread_id, owner, comment_id, content, created_at, is_delete],
     };
 
     const result = await this._pool.query(query);
@@ -43,7 +43,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async getReplyByCommentId(comment_id) {
     const query = {
-      text: 'SELECT r.id, u.username, r.created_at AS date, r.content FROM replies AS r LEFT JOIN users u ON r.user_id = u.id WHERE r.comment_id = $1 ORDER BY r.created_at ASC;',
+      text: 'SELECT r.id, u.username, r.created_at AS date, r.content FROM replies AS r LEFT JOIN users u ON r.owner = u.id WHERE r.comment_id = $1 ORDER BY r.created_at ASC;',
       values: [comment_id],
     };
 
@@ -70,10 +70,10 @@ class ReplyRepositoryPostgres extends ReplyRepository {
     return result.rows[0];
   }
 
-  async verifyReplyOwner(reply_id, user_id) {
+  async verifyReplyOwner(reply_id, owner) {
     const query = {
-      text: 'SELECT * FROM replies WHERE id = $1 AND user_id = $2;',
-      values: [reply_id, user_id],
+      text: 'SELECT * FROM replies WHERE id = $1 AND owner = $2;',
+      values: [reply_id, owner],
     };
 
     const result = await this._pool.query(query);

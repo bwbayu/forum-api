@@ -8,13 +8,13 @@ describe('AddThreadUseCase', () => {
     const useCasePayload = {
       title: 'thread 1',
       body: 'isi thread 1',
-      user_id: 'user-123',
+      owner: 'user-123',
     };
 
     const mockAddedThread = new AddedThread({
       id: 'thread-123',
       title: useCasePayload.title,
-      user_id: useCasePayload.user_id,
+      owner: useCasePayload.owner,
     });
 
     const mockThreadRepository = new ThreadRepository();
@@ -26,12 +26,11 @@ describe('AddThreadUseCase', () => {
     });
 
     const addedThread = await addThreadUseCase.execute(useCasePayload);
-
     expect(mockThreadRepository.addThread).toHaveBeenCalledWith(expect.any(Object));
-    expect(addedThread).toStrictEqual(new AddedThread({
+    expect(addedThread.addedThread).toStrictEqual(new AddedThread({
       id: 'thread-123',
       title: useCasePayload.title,
-      user_id: useCasePayload.user_id,
+      owner: useCasePayload.owner,
     }));
   });
 });

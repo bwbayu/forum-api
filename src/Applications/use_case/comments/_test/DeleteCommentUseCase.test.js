@@ -21,7 +21,7 @@ describe('DeleteCommentUseCase', () => {
     const useCasePayload = {
       comment_id: 123,
       thread_id: 'thread-123',
-      user_id: 'user-123',
+      owner: 'user-123',
     };
 
     const deleteCommentUseCase = new DeleteCommentUseCase({});
@@ -35,7 +35,7 @@ describe('DeleteCommentUseCase', () => {
     const useCasePayload = {
       comment_id: 'comment-123',
       thread_id: 'thread-123',
-      user_id: 'user-123',
+      owner: 'user-123',
     };
 
     const mockCommentRepository = new CommentRepository();

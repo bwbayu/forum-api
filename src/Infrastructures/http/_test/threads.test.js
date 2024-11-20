@@ -151,9 +151,7 @@ describe('/threads endpoint', () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
       const threadData = JSON.parse(threadResponse.payload).data.addedThread;
-
       const response = await server.inject({
         method: 'GET',
         url: `/threads/${threadData.id}`,

@@ -10,13 +10,13 @@ describe('AddCommentUseCase', () => {
     const useCasePayload = {
       content: 'This is a comment',
       thread_id: 'thread-123',
-      user_id: 'user-123',
+      owner: 'user-123',
     };
 
     const mockAddedComment = new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
-      user_id: useCasePayload.user_id,
+      owner: useCasePayload.owner,
     });
 
     const mockCommentRepository = new CommentRepository();
@@ -27,7 +27,7 @@ describe('AddCommentUseCase', () => {
       .mockImplementation(() => Promise.resolve({ id: useCasePayload.thread_id }));
 
     mockUserRepository.getUserById = jest.fn()
-      .mockImplementation(() => Promise.resolve({ id: useCasePayload.user_id }));
+      .mockImplementation(() => Promise.resolve({ id: useCasePayload.owner }));
 
     mockCommentRepository.addComment = jest.fn()
       .mockImplementation(() => Promise.resolve(mockAddedComment));
@@ -40,10 +40,10 @@ describe('AddCommentUseCase', () => {
 
     const addedComment = await addCommentUseCase.execute(useCasePayload);
 
-    expect(addedComment).toStrictEqual(new AddedComment({
+    expect(addedComment.addedComment).toStrictEqual(new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
-      user_id: useCasePayload.user_id,
+      owner: useCasePayload.owner,
     }));
   });
 });

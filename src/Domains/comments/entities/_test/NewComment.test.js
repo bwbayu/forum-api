@@ -10,7 +10,7 @@ describe('a Comment entity', () => {
   it('should throw error when payload did not meet data type specification', () => {
     const payload = {
       content: 123,
-      user_id: 'user-123',
+      owner: 'user-123',
       thread_id: 'thread-123',
     };
 
@@ -20,7 +20,7 @@ describe('a Comment entity', () => {
   it('should create comment object correctly', () => {
     const payload = {
       content: 'ini komentar',
-      user_id: 'user-123',
+      owner: 'user-123',
       thread_id: 'thread-123',
     };
 
