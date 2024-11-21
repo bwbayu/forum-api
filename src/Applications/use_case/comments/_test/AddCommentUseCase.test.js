@@ -4,6 +4,7 @@ const ThreadRepository = require('../../../../Domains/threads/ThreadRepository')
 const UserRepository = require('../../../../Domains/users/UserRepository');
 const AddCommentUseCase = require('../AddCommentUseCase');
 const AddedComment = require('../../../../Domains/comments/entities/AddedComment');
+const NewComment = require('../../../../Domains/comments/entities/NewComment');
 
 describe('AddCommentUseCase', () => {
   it('should orchestrating the add comment action correctly', async () => {
@@ -40,10 +41,9 @@ describe('AddCommentUseCase', () => {
 
     const addedComment = await addCommentUseCase.execute(useCasePayload);
 
-    expect(addedComment).toStrictEqual(new AddedComment({
-      id: 'comment-123',
-      content: useCasePayload.content,
-      owner: useCasePayload.owner,
-    }));
+    expect(mockThreadRepository.getThreadById).toBeCalledWith(useCasePayload.thread_id);
+    expect(mockUserRepository.getUserById).toBeCalledWith(useCasePayload.owner);
+    expect(mockCommentRepository.addComment).toBeCalledWith(new NewComment(useCasePayload));
+    expect(addedComment).toStrictEqual(mockAddedComment);
   });
 });

@@ -5,6 +5,7 @@ const UserRepository = require('../../../../Domains/users/UserRepository');
 const ReplyRepository = require('../../../../Domains/replies/ReplyRepository');
 const AddReplyUseCase = require('../AddReplyUseCase');
 const AddedReply = require('../../../../Domains/replies/entities/AddedReply');
+const NewReply = require('../../../../Domains/replies/entities/NewReply');
 
 describe('AddReplyUseCase', () => {
   let mockReplyRepository; let mockCommentRepository; let mockThreadRepository; let mockUserRepository; let
@@ -50,6 +51,7 @@ describe('AddReplyUseCase', () => {
     expect(mockCommentRepository.getCommentById).toHaveBeenCalledWith('comment-123');
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith('thread-123');
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-123');
+    expect(mockReplyRepository.addReply).toHaveBeenCalledWith(new NewReply(useCasePayload));
     expect(addedReply).toEqual(new AddedReply({
       id: 'reply-123',
       content: 'This is a reply comment',
