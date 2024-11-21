@@ -83,7 +83,6 @@ describe('CommentRepositoryPostgres', () => {
       const comment = await CommentsTableTestHelper.findCommentById('comment-123');
       expect(comment).toHaveLength(1);
       expect(comment[0].is_delete).toEqual(true);
-      expect(comment[0].content).toEqual('**komentar telah dihapus**');
     });
 
     it('should throw NotFoundError when deleting a non-existent comment', async () => {

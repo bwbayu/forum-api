@@ -20,9 +20,13 @@ class GetDetailThreadUseCase {
       username: thread.username,
       comments: [],
     });
-
     if (comments.length > 0) {
       for (const comment of comments) {
+
+        if(comment.is_delete){
+          comment.content = "**komentar telah dihapus**";
+        }
+
         const commentDetail = new DetailComment({
           id: comment.id,
           content: comment.content,
@@ -30,20 +34,24 @@ class GetDetailThreadUseCase {
           username: comment.username,
           replies: [],
         });
+
         // get replies
         const replies = await this._replyRepository.getReplyByCommentId(commentDetail.id);
         if (replies.length > 0) {
           for (const reply of replies) {
+            if(reply.is_delete){
+              reply.content = "**balasan telah dihapus**";
+            }
             const detailReply = new DetailReply({
               id: reply.id,
               content: reply.content,
               date: reply.date,
               username: reply.username,
             });
+
             commentDetail.replies.push(detailReply);
           }
         }
-
         // add comment and replies to thread
         detailThread.comments.push(commentDetail);
       }

@@ -98,7 +98,6 @@ describe('ReplyRepositoryPostgres', () => {
       const reply = await RepliesTableTestHelper.findReplyById('reply-123');
       expect(reply).toHaveLength(1);
       expect(reply[0].is_delete).toEqual(true);
-      expect(reply[0].content).toEqual('**balasan telah dihapus**');
     });
 
     it('should throw NotFoundError when deleting a non-existent reply', async () => {

@@ -23,12 +23,14 @@ describe('GetDetailThreadUseCase', () => {
         content: 'Comment Content 1',
         date: '2023-11-18',
         username: 'jane_doe',
+        is_delete: false,
       },
       {
         id: 'comment-456',
-        content: 'Comment Content 2',
+        content: '**komentar telah dihapus**',
         date: '2023-11-17',
         username: 'alice',
+        is_delete: true,
       },
     ];
 
@@ -39,6 +41,14 @@ describe('GetDetailThreadUseCase', () => {
           content: 'Reply Content 1',
           date: '2023-11-18',
           username: 'bob',
+          is_delete: false,
+        },
+        {
+          id: 'reply-124',
+          content: '**balasan telah dihapus**',
+          date: '2023-11-18',
+          username: 'bob 2',
+          is_delete: true,
         },
       ],
       'comment-456': [],
@@ -71,11 +81,11 @@ describe('GetDetailThreadUseCase', () => {
 
     expect(result).toEqual(
       new DetailThread({
-        id: mockThread.id,
-        title: mockThread.title,
-        body: mockThread.body,
-        date: mockThread.date,
-        username: mockThread.username,
+        id: 'thread-123',
+        title: 'Thread Title',
+        body: 'Thread Body',
+        date: '2023-11-19',
+        username: 'john_doe',
         comments: [
           new DetailComment({
             id: 'comment-123',
@@ -89,11 +99,17 @@ describe('GetDetailThreadUseCase', () => {
                 date: '2023-11-18',
                 username: 'bob',
               }),
+              new DetailReply({
+                id: 'reply-124',
+                content: '**balasan telah dihapus**',
+                date: '2023-11-18',
+                username: 'bob 2',
+              }),
             ],
           }),
           new DetailComment({
             id: 'comment-456',
-            content: 'Comment Content 2',
+            content: '**komentar telah dihapus**',
             date: '2023-11-17',
             username: 'alice',
             replies: [],
@@ -105,10 +121,10 @@ describe('GetDetailThreadUseCase', () => {
 
   it('should return thread without comments if no comments are found', async () => {
     // Arrange
-    const useCasePayload = 'thread-123';
+    const useCasePayload = 'thread-125';
 
     const mockThread = {
-      id: 'thread-123',
+      id: 'thread-125',
       title: 'Thread Title',
       body: 'Thread Body',
       date: '2023-11-19',
@@ -152,10 +168,10 @@ describe('GetDetailThreadUseCase', () => {
   });
 
   it('should return thread with comments but without replies if replies are not found', async () => {
-    const useCasePayload = 'thread-123';
+    const useCasePayload = 'thread-126';
 
     const mockThread = {
-      id: 'thread-123',
+      id: 'thread-126',
       title: 'Thread Title',
       body: 'Thread Body',
       date: '2023-11-19',
@@ -164,7 +180,7 @@ describe('GetDetailThreadUseCase', () => {
 
     const mockComments = [
       {
-        id: 'comment-123',
+        id: 'comment-126',
         content: 'Comment Content 1',
         date: '2023-11-18',
         username: 'jane_doe',
@@ -172,7 +188,7 @@ describe('GetDetailThreadUseCase', () => {
     ];
 
     const mockReplies = {
-      'comment-123': [],
+      'comment-126': [],
     };
 
     const mockThreadRepository = {
@@ -197,7 +213,7 @@ describe('GetDetailThreadUseCase', () => {
     // Assert
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(useCasePayload);
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(useCasePayload);
-    expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-123');
+    expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-126');
     expect(result).toEqual(
       new DetailThread({
         id: mockThread.id,
@@ -207,7 +223,7 @@ describe('GetDetailThreadUseCase', () => {
         username: mockThread.username,
         comments: [
           new DetailComment({
-            id: 'comment-123',
+            id: 'comment-126',
             content: 'Comment Content 1',
             date: '2023-11-18',
             username: 'jane_doe',
