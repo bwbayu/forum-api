@@ -19,7 +19,9 @@ class ThreadsHandler {
     const addedThread = await addThreadUseCase.execute(useCasePayload);
     const response = h.response({
       status: 'success',
-      data: addedThread,
+      data: {
+        addedThread
+      },
     });
     response.code(201);
 

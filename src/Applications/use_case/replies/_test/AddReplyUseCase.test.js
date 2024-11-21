@@ -50,7 +50,7 @@ describe('AddReplyUseCase', () => {
     expect(mockCommentRepository.getCommentById).toHaveBeenCalledWith('comment-123');
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith('thread-123');
     expect(mockUserRepository.getUserById).toHaveBeenCalledWith('user-123');
-    expect(addedReply.addedReply).toEqual(new AddedReply({
+    expect(addedReply).toEqual(new AddedReply({
       id: 'reply-123',
       content: 'This is a reply comment',
       owner: 'user-123',

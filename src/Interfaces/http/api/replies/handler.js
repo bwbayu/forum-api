@@ -22,7 +22,9 @@ class RepliesHandler {
     const addedReply = await addReplyUseCase.execute(useCasePayload);
     const response = h.response({
       status: 'success',
-      data: addedReply,
+      data: {
+        addedReply,
+      },
     });
     response.code(201);
 

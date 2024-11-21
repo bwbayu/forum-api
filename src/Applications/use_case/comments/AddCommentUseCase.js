@@ -15,7 +15,7 @@ class AddCommentUseCase {
     const newComment = new NewComment(useCasePayload);
 
     const result = await this._commentRepository.addComment(newComment);
-    return {"addedComment": result}
+    return result
   }
 }
 

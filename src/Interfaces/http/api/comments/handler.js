@@ -21,7 +21,9 @@ class CommentsHandler {
     const addedComment = await addCommentUseCase.execute(useCasePayload);
     const response = h.response({
       status: 'success',
-      data: addedComment,
+      data: {
+        addedComment
+      },
     });
     response.code(201);
 

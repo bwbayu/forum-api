@@ -40,7 +40,7 @@ describe('AddCommentUseCase', () => {
 
     const addedComment = await addCommentUseCase.execute(useCasePayload);
 
-    expect(addedComment.addedComment).toStrictEqual(new AddedComment({
+    expect(addedComment).toStrictEqual(new AddedComment({
       id: 'comment-123',
       content: useCasePayload.content,
       owner: useCasePayload.owner,

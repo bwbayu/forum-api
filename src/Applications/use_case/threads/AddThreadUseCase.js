@@ -9,7 +9,7 @@ class AddThreadUseCase {
     const newThread = new NewThread(useCasePayload);
     const result = await this._threadRepository.addThread(newThread);
 
-    return {"addedThread": result};
+    return result;
   }
 }
 

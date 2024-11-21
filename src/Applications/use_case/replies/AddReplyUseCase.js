@@ -19,7 +19,7 @@ class AddReplyUseCase {
 
     const newReply = new NewReply(useCasePayload);
     const result =  await this._replyRepository.addReply(newReply);
-    return {"addedReply":result}
+    return result
   }
 }
 
