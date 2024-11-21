@@ -149,4 +149,23 @@ describe('CommentRepositoryPostgres', () => {
         .toThrowError(AuthorizationError);
     });
   });
+
+  describe('verifyCommentAvailability function', () => {
+    it('should throw NotFoundError if no comment found', async () => {
+      // Arrange
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(commentRepositoryPostgres.verifyCommentAvailability('comment-123')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError if comment found', async () => {
+      await CommentsTableTestHelper.addComment(commentPayload);
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
+
+      // Action
+      await expect(commentRepositoryPostgres.verifyCommentAvailability('comment-123'))
+        .resolves.not.toThrow(NotFoundError);
+    });
+  });
 });

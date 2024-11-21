@@ -102,5 +102,5 @@ describe('ThreadRepositoryPostgres', () => {
       await expect(threadRepositoryPostgres.verifyThreadAvailability('thread-123'))
         .resolves.not.toThrow(NotFoundError);
     });
-  })
+  });
 });

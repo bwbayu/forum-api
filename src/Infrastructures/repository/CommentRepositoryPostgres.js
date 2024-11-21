@@ -78,6 +78,19 @@ class CommentRepositoryPostgres extends CommentRepository {
       throw new AuthorizationError('You do not have access to delete this comment.');
     }
   }
+
+  async verifyCommentAvailability(comment_id){
+    const query = {
+      text: "SELECT id FROM comments WHERE id = $1",
+      values: [comment_id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('komentar tidak ditemukan');
+    }
+  }
 }
 
 module.exports = CommentRepositoryPostgres;
