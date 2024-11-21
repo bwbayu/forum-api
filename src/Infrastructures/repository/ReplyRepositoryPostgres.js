@@ -81,6 +81,19 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       throw new AuthorizationError('You do not have access to delete this reply.');
     }
   }
+
+  async verifyReplyAvailability(reply_id){
+    const query = {
+      text: "SELECT id FROM replies WHERE id = $1",
+      values: [reply_id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('balasan tidak ditemukan');
+    }
+  }
 }
 
 module.exports = ReplyRepositoryPostgres;

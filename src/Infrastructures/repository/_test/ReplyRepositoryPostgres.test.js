@@ -175,4 +175,23 @@ describe('ReplyRepositoryPostgres', () => {
         .toThrowError(AuthorizationError);
     });
   });
+
+  describe('verifyReplyAvailability function', () => {
+    it('should throw NotFoundError if no reply found', async () => {
+      // Arrange
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      await expect(replyRepositoryPostgres.verifyReplyAvailability('reply-123')).rejects.toThrowError(NotFoundError);
+    });
+
+    it('should not throw NotFoundError if reply found', async () => {
+      await RepliesTableTestHelper.addReply(replyPayload1);
+      const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
+
+      // Action
+      await expect(replyRepositoryPostgres.verifyReplyAvailability('reply-123'))
+        .resolves.not.toThrow(NotFoundError);
+    });
+  });
 });

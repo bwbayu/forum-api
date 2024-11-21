@@ -19,6 +19,10 @@ class ReplyRepository {
   async verifyReplyOwner(reply_id, owner) {
     throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
   }
+
+  async verifyReplyAvailability(thread_id){
+    throw new Error('REPLY_REPOSITORY.METHOD_NOT_IMPLEMENTED');
+  }
 }
 
 module.exports = ReplyRepository;
