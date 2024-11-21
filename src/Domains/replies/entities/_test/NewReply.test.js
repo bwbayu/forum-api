@@ -28,6 +28,9 @@ describe('a reply entity', () => {
 
     const reply = new NewReply(payload);
 
-    expect(reply.content).toEqual(payload.content);
+    expect(reply.content).toEqual('ini balasan komentar');
+    expect(reply.owner).toEqual('user-123');
+    expect(reply.thread_id).toEqual('thread-123');
+    expect(reply.comment_id).toEqual('comment-123');
   });
 });

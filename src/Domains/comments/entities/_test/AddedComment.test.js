@@ -30,8 +30,8 @@ describe('an AddedComment entity', () => {
 
     const addedComment = new AddedComment(payload);
 
-    expect(addedComment.id).toEqual(payload.id);
-    expect(addedComment.content).toEqual(payload.content);
-    expect(addedComment.owner).toEqual(payload.owner);
+    expect(addedComment.id).toEqual('comment-123');
+    expect(addedComment.content).toEqual('This is a comment');
+    expect(addedComment.owner).toEqual('user-123');
   });
 });

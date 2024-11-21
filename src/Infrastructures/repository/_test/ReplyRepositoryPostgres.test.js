@@ -98,6 +98,11 @@ describe('ReplyRepositoryPostgres', () => {
       const reply = await RepliesTableTestHelper.findReplyById('reply-123');
       expect(reply).toHaveLength(1);
       expect(reply[0].is_delete).toEqual(true);
+      expect(reply[0].id).toEqual('reply-123');
+      expect(reply[0].thread_id).toEqual('thread-123');
+      expect(reply[0].owner).toEqual('user-123');
+      expect(reply[0].comment_id).toEqual('comment-123');
+      expect(reply[0].content).toEqual('This is a reply comment');
     });
 
     it('should throw NotFoundError when deleting a non-existent reply', async () => {
@@ -134,7 +139,11 @@ describe('ReplyRepositoryPostgres', () => {
 
       const replies = await replyRepositoryPostgres.getReplyById('reply-123');
 
+      expect(replies.is_delete).toEqual(false);
       expect(replies.id).toEqual('reply-123');
+      expect(replies.thread_id).toEqual('thread-123');
+      expect(replies.owner).toEqual('user-123');
+      expect(replies.comment_id).toEqual('comment-123');
       expect(replies.content).toEqual('This is a reply comment');
     });
 
@@ -154,7 +163,7 @@ describe('ReplyRepositoryPostgres', () => {
 
       await expect(replyRepositoryPostgres.verifyReplyOwner('reply-123', owner))
         .resolves
-        .not.toThrow();
+        .not.toThrow(AuthorizationError);
     });
 
     it('should throw AuthorizationError when user is not the owner of the reply', async () => {

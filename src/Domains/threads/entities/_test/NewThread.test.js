@@ -38,8 +38,8 @@ describe('a Thread entities', () => {
 
     const { title, body, owner } = new NewThread(payload);
 
-    expect(title).toEqual(payload.title);
-    expect(body).toEqual(payload.body);
-    expect(owner).toEqual(payload.owner);
+    expect(title).toEqual('thread 1');
+    expect(body).toEqual('isi thread 1');
+    expect(owner).toEqual('user-123');
   });
 });

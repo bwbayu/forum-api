@@ -27,15 +27,6 @@ describe('CommentRepositoryPostgres', () => {
     is_delete: false,
   }
 
-  const commentPayload2 = {
-    id: 'comment-124',
-    thread_id: threadPayload.id,
-    owner,
-    content: 'This is a comment 2',
-    created_at: new Date().toISOString(),
-    is_delete: false,
-  }
-
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({ id: owner });
     await ThreadsTableTestHelper.addThread(threadPayload);
@@ -83,6 +74,10 @@ describe('CommentRepositoryPostgres', () => {
       const comment = await CommentsTableTestHelper.findCommentById('comment-123');
       expect(comment).toHaveLength(1);
       expect(comment[0].is_delete).toEqual(true);
+      expect(comment[0].id).toEqual('comment-123');
+      expect(comment[0].thread_id).toEqual('thread-123');
+      expect(comment[0].owner).toEqual('user-123');
+      expect(comment[0].content).toEqual('This is a comment');
     });
 
     it('should throw NotFoundError when deleting a non-existent comment', async () => {
@@ -95,12 +90,14 @@ describe('CommentRepositoryPostgres', () => {
   describe('getCommentByThreadId function', () => {
     it('should return comments by thread ID', async () => {
       await CommentsTableTestHelper.addComment(commentPayload);
-      await CommentsTableTestHelper.addComment(commentPayload2);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       const comments = await commentRepositoryPostgres.getCommentByThreadId(threadPayload.id);
 
-      expect(comments).toHaveLength(2);
+      expect(comments).toHaveLength(1);
+      expect(comments[0].is_delete).toEqual(false);
+      expect(comments[0].id).toEqual('comment-123');
+      expect(comments[0].content).toEqual('This is a comment');
     });
 
     it('should return empty array if no comments found for thread', async () => {
@@ -121,6 +118,7 @@ describe('CommentRepositoryPostgres', () => {
 
       expect(comment.id).toEqual('comment-123');
       expect(comment.content).toEqual('This is a comment');
+      expect(comment.is_delete).toEqual(false);
     });
 
     it('should throw NotFoundError if comment id is not found', async () => {
@@ -139,7 +137,7 @@ describe('CommentRepositoryPostgres', () => {
 
       await expect(commentRepositoryPostgres.verifyCommentOwner('comment-123', owner))
         .resolves
-        .not.toThrow();
+        .not.toThrow(AuthorizationError);
     });
 
     it('should throw AuthorizationError when user is not the owner of the comment', async () => {

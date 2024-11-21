@@ -39,11 +39,11 @@ describe('a Detail Thread entities', () => {
 
     const detailThread = new DetailThread(payload);
 
-    expect(detailThread.id).toEqual(payload.id);
-    expect(detailThread.title).toEqual(payload.title);
-    expect(detailThread.body).toEqual(payload.body);
-    expect(detailThread.date).toEqual(payload.date);
-    expect(detailThread.username).toEqual(payload.username);
+    expect(detailThread.id).toEqual('thread-123');
+    expect(detailThread.title).toEqual('thread 1');
+    expect(detailThread.body).toEqual('isi thread 1');
+    expect(detailThread.date).toEqual('2024-11-15');
+    expect(detailThread.username).toEqual('user-123');
     expect(detailThread.comments).toEqual(payload.comments);
   });
 });

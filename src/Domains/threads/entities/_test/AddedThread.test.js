@@ -29,8 +29,8 @@ describe('a added thread entities', () => {
 
     const { id, title, owner } = new AddedThread(payload);
 
-    expect(id).toEqual(payload.id);
-    expect(title).toEqual(payload.title);
-    expect(owner).toEqual(payload.owner);
+    expect(id).toEqual('thread-12345678');
+    expect(title).toEqual('thread 1');
+    expect(owner).toEqual('user-123345678');
   });
 });

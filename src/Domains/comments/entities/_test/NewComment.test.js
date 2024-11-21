@@ -26,6 +26,8 @@ describe('a Comment entity', () => {
 
     const comment = new NewComment(payload);
 
-    expect(comment.content).toEqual(payload.content);
+    expect(comment.content).toEqual('ini komentar');
+    expect(comment.owner).toEqual('user-123');
+    expect(comment.thread_id).toEqual('thread-123');
   });
 });

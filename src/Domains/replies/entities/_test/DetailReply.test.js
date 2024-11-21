@@ -28,8 +28,9 @@ describe('a DetailReply entity', () => {
 
     const detailReply = new DetailReply(payload);
 
-    expect(detailReply.id).toEqual(payload.id);
-    expect(detailReply.content).toEqual(payload.content);
-    expect(detailReply.username).toEqual(payload.username);
+    expect(detailReply.id).toEqual('reply-123');
+    expect(detailReply.content).toEqual('This is a reply comment');
+    expect(detailReply.date).toEqual('2024-11-15');
+    expect(detailReply.username).toEqual('user-123');
   });
 });

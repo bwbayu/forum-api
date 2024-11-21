@@ -48,7 +48,6 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       return [];
     }
-
     return result.rows;
   }
 
