@@ -55,6 +55,7 @@ describe('GetDetailThreadUseCase', () => {
     };
 
     const mockThreadRepository = {
+      verifyThreadAvailability: jest.fn().mockResolvedValue(),
       getThreadById: jest.fn().mockResolvedValue(mockThread),
     };
     const mockCommentRepository = {
@@ -74,6 +75,7 @@ describe('GetDetailThreadUseCase', () => {
     const result = await getDetailThreadUseCase.execute(useCasePayload);
 
     // Assert
+    expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith(useCasePayload);
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(useCasePayload);
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(useCasePayload);
     expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-123');
@@ -132,6 +134,7 @@ describe('GetDetailThreadUseCase', () => {
     };
 
     const mockThreadRepository = {
+      verifyThreadAvailability: jest.fn().mockResolvedValue(),
       getThreadById: jest.fn().mockResolvedValue(mockThread),
     };
     const mockCommentRepository = {
@@ -151,6 +154,7 @@ describe('GetDetailThreadUseCase', () => {
     const result = await getDetailThreadUseCase.execute(useCasePayload);
 
     // Assert
+    expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith(useCasePayload);
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(useCasePayload);
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(useCasePayload);
     expect(mockReplyRepository.getReplyByCommentId).not.toHaveBeenCalled();
@@ -192,6 +196,7 @@ describe('GetDetailThreadUseCase', () => {
     };
 
     const mockThreadRepository = {
+      verifyThreadAvailability: jest.fn().mockResolvedValue(),
       getThreadById: jest.fn().mockResolvedValue(mockThread),
     };
     const mockCommentRepository = {
@@ -211,6 +216,7 @@ describe('GetDetailThreadUseCase', () => {
     const result = await getDetailThreadUseCase.execute(useCasePayload);
 
     // Assert
+    expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith(useCasePayload);
     expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith(useCasePayload);
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(useCasePayload);
     expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-126');

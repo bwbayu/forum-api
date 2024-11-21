@@ -13,9 +13,9 @@ class DeleteReplyUseCase {
     } = useCasePayload;
 
     // validasi item
-    await this._threadRepository.getThreadById(thread_id);
-    await this._commentRepository.getCommentById(comment_id);
-    await this._replyRepository.getReplyById(reply_id);
+    await this._threadRepository.verifyThreadAvailability(thread_id);
+    await this._commentRepository.verifyCommentAvailability(comment_id);
+    await this._replyRepository.verifyReplyAvailability(reply_id);
     await this._replyRepository.verifyReplyOwner(reply_id, owner);
     return this._replyRepository.deleteReply(reply_id);
   }

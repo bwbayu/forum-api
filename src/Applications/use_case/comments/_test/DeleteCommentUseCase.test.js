@@ -41,10 +41,10 @@ describe('DeleteCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
-    mockThreadRepository.getThreadById = jest.fn()
-      .mockImplementation(() => Promise.resolve({ id: useCasePayload.thread_id }));
-    mockCommentRepository.getCommentById = jest.fn()
-      .mockImplementation(() => Promise.resolve({ id: useCasePayload.comment_id }));
+    mockThreadRepository.verifyThreadAvailability = jest.fn()
+      .mockImplementation(() => Promise.resolve());
+    mockCommentRepository.verifyCommentAvailability = jest.fn()
+      .mockImplementation(() => Promise.resolve());
     mockCommentRepository.verifyCommentOwner = jest.fn()
       .mockImplementation(() => Promise.resolve());
     mockCommentRepository.deleteComment = jest.fn()
@@ -57,8 +57,8 @@ describe('DeleteCommentUseCase', () => {
 
     await deleteCommentUseCase.execute(useCasePayload);
 
-    expect(mockThreadRepository.getThreadById).toHaveBeenCalledWith('thread-123');
-    expect(mockCommentRepository.getCommentById).toHaveBeenCalledWith('comment-123');
+    expect(mockThreadRepository.verifyThreadAvailability).toHaveBeenCalledWith('thread-123');
+    expect(mockCommentRepository.verifyCommentAvailability).toHaveBeenCalledWith('comment-123');
     expect(mockCommentRepository.verifyCommentOwner).toHaveBeenCalledWith('comment-123', 'user-123');
     expect(mockCommentRepository.deleteComment).toHaveBeenCalledWith('comment-123');
   });

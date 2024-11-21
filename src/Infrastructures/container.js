@@ -258,10 +258,6 @@ container.register([
           name: 'commentRepository',
           internal: CommentRepository.name,
         },
-        {
-          name: 'userRepository',
-          internal: UserRepository.name,
-        },
       ],
     },
   },
@@ -295,10 +291,6 @@ container.register([
         {
           name: 'commentRepository',
           internal: CommentRepository.name,
-        },
-        {
-          name: 'userRepository',
-          internal: UserRepository.name,
         },
         {
           name: 'replyRepository',
