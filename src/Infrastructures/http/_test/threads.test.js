@@ -69,6 +69,7 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.addedThread).toBeDefined();
       expect(responseJson.data.addedThread.title).toEqual('thread 1');
     });
 
@@ -81,15 +82,15 @@ describe('/threads endpoint', () => {
       const response = await server.inject({
         method: 'POST',
         url: '/threads',
-        payload: threadPayload,
-        headers: {
-          Authorization: 'Bearer invalid-token',
-        },
+        payload: threadPayload
       });
 
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(401);
       expect(responseJson.error).toEqual('Unauthorized');
+      expect(responseJson.message).toEqual(
+        "Missing authentication"
+      );
     });
 
     it('should response 400 if payload not contain needed property', async () => {
@@ -109,6 +110,7 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena data tidak lengkap');
     });
 
     it('should response 400 if payload not meet data type specification', async () => {
@@ -131,6 +133,30 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('tidak dapat membuat thread baru karena tipe data tidak sesuai');
+    });
+
+    it('should response 400 when title more than 50 character', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+
+      const threadPayload = {
+        title: 'kasjfaklsdjfklsdjafkljsadkfjklsdjafkjasdkfjakldsjflkdsajfkdjsafls',
+        body: 'body 123',
+      };
+
+      const response = await server.inject({
+        method: 'POST',
+        url: '/threads',
+        payload: threadPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(400);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('panjang judul tidak boleh lebih dari 50');
     });
   });
 
@@ -184,6 +210,7 @@ describe('/threads endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
     });
   });
 });

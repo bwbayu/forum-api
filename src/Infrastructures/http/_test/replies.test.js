@@ -112,6 +112,7 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.addedReply).toBeDefined();
       expect(responseJson.data.addedReply.content).toEqual('balasan komentar pertama');
     });
 
@@ -132,6 +133,30 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('tidak dapat membuat balasan baru karena data tidak lengkap');
+    });
+
+    it('should response 400 if payload not meet data type specification', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+      const thread_id = await addThread(accessToken);
+      const comment_id = await addComment(accessToken, thread_id);
+      const replyPayload = {
+        content: 123,
+      };
+
+      const response = await server.inject({
+        method: 'POST',
+        url: `/threads/${thread_id}/comments/${comment_id}/replies`,
+        payload: replyPayload,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(400);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('tidak dapat membuat balasan baru karena tipe data tidak sesuai');
     });
 
     it('should response 401 if no authorization', async () => {
@@ -144,6 +169,29 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(401);
       expect(responseJson.error).toEqual('Unauthorized');
+      expect(responseJson.message).toEqual(
+        "Missing authentication"
+      );
+    });
+
+    it('should respond 404 if the thread does not exist', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+
+      const response = await server.inject({
+        method: 'POST',
+        url: `/threads/thread-123/comments/comment-123/replies`,
+        payload: { content: 'balasan komentar untuk komentar tidak valid' },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "thread tidak ditemukan"
+      );
     });
 
     it('should respond 404 if the comment does not exist', async () => {
@@ -162,6 +210,9 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "komentar tidak ditemukan"
+      );
     });
   });
 
@@ -234,6 +285,48 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(403);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "You do not have access to delete this reply."
+      );
+    });
+
+    it('should response 404 if thread does not exist', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/thread-123/comments/comment-123/replies/reply-999`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "thread tidak ditemukan"
+      );
+    });
+
+    it('should response 404 if thread does not exist', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+      const thread_id = await addThread(accessToken);
+
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `/threads/${thread_id}/comments/comment-123/replies/reply-999`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "komentar tidak ditemukan"
+      );
     });
 
     it('should response 404 if reply does not exist', async () => {
@@ -252,6 +345,9 @@ describe('/replies endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual(
+        "balasan tidak ditemukan"
+      );
     });
   });
 });

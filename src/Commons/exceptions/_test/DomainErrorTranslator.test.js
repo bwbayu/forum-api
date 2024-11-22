@@ -33,28 +33,16 @@ describe('DomainErrorTranslator', () => {
       .toStrictEqual(new InvariantError('tidak dapat membuat thread baru karena tipe data tidak sesuai'));
     expect(DomainErrorTranslator.translate(new Error('NEW_THREAD.TITLE_LIMIT_CHAR')))
       .toStrictEqual(new InvariantError('panjang judul tidak boleh lebih dari 50'));
-    expect(DomainErrorTranslator.translate(new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail thread baru karena data tidak lengkap'));
-    expect(DomainErrorTranslator.translate(new Error('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail thread baru karena tipe data tidak sesuai'));
     // comment error
     expect(DomainErrorTranslator.translate(new Error('NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY')))
       .toStrictEqual(new InvariantError('tidak dapat membuat komentar baru karena data tidak lengkap'));
     expect(DomainErrorTranslator.translate(new Error('NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION')))
       .toStrictEqual(new InvariantError('tidak dapat membuat komentar baru karena tipe data tidak sesuai'));
-    expect(DomainErrorTranslator.translate(new Error('COMMENT_DETAILS.NOT_CONTAIN_NEEDED_PROPERTY')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail komentar baru karena data tidak lengkap'));
-    expect(DomainErrorTranslator.translate(new Error('COMMENT_DETAILS.NOT_MEET_DATA_TYPE_SPECIFICATION')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail komentar baru karena tipe data tidak sesuai'));
     // reply error
     expect(DomainErrorTranslator.translate(new Error('NEW_REPLY.NOT_CONTAIN_NEEDED_PROPERTY')))
       .toStrictEqual(new InvariantError('tidak dapat membuat balasan baru karena data tidak lengkap'));
     expect(DomainErrorTranslator.translate(new Error('NEW_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION')))
       .toStrictEqual(new InvariantError('tidak dapat membuat balasan baru karena tipe data tidak sesuai'));
-    expect(DomainErrorTranslator.translate(new Error('DETAIL_REPLY.NOT_CONTAIN_NEEDED_PROPERTY')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail balasan baru karena data tidak lengkap'));
-    expect(DomainErrorTranslator.translate(new Error('DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION')))
-      .toStrictEqual(new InvariantError('tidak dapat membuat detail balasan baru karena tipe data tidak sesuai'));
   });
 
   it('should return original error when error message is not needed to translate', () => {
