@@ -28,7 +28,7 @@ describe('CommentRepositoryPostgres', () => {
   }
 
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({ id: owner });
+    await UsersTableTestHelper.addUser({ id: owner, username: 'dicoding' });
     await ThreadsTableTestHelper.addThread(threadPayload);
   });
 
@@ -78,6 +78,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment[0].thread_id).toEqual('thread-123');
       expect(comment[0].owner).toEqual('user-123');
       expect(comment[0].content).toEqual('This is a comment');
+      expect(comment[0].date).toEqual(comment[0].date);
     });
 
     it('should throw NotFoundError when deleting a non-existent comment', async () => {
@@ -98,6 +99,8 @@ describe('CommentRepositoryPostgres', () => {
       expect(comments[0].is_delete).toEqual(false);
       expect(comments[0].id).toEqual('comment-123');
       expect(comments[0].content).toEqual('This is a comment');
+      expect(comments[0].date).toEqual(comments[0].date);
+      expect(comments[0].username).toEqual('dicoding');
     });
 
     it('should return empty array if no comments found for thread', async () => {
@@ -117,8 +120,11 @@ describe('CommentRepositoryPostgres', () => {
       const comment = await commentRepositoryPostgres.getCommentById('comment-123');
 
       expect(comment.id).toEqual('comment-123');
+      expect(comment.thread_id).toEqual('thread-123');
+      expect(comment.owner).toEqual('user-123');
       expect(comment.content).toEqual('This is a comment');
       expect(comment.is_delete).toEqual(false);
+      expect(comment.date).toEqual(comment.date);
     });
 
     it('should throw NotFoundError if comment id is not found', async () => {

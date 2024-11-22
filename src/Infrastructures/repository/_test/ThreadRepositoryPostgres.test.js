@@ -9,6 +9,13 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 describe('ThreadRepositoryPostgres', () => {
   const owner = 'user-123';
   const username = 'user_john';
+  const threadPayload = {
+    id: 'thread-123',
+    owner,
+    title: 'thread 1',
+    body: 'isi thread 1',
+    created_at: new Date().toISOString(),
+  }
 
   beforeAll(async () => {
     await UsersTableTestHelper.addUser({ id: owner, username });
@@ -57,12 +64,6 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should return thread when id is found', async () => {
-      const threadPayload = {
-        id: 'thread-123',
-        owner,
-        title: 'thread 1',
-        body: 'isi thread 1',
-      }
       // Arrange
       await ThreadsTableTestHelper.addThread(threadPayload);
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
@@ -75,6 +76,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.title).toEqual('thread 1');
       expect(thread.body).toEqual('isi thread 1');
       expect(thread.username).toEqual(username);
+      expect(thread.date).toEqual(thread.date);
     });
   });
 
@@ -88,12 +90,6 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should not throw NotFoundError if thread found', async () => {
-      const threadPayload = {
-        id: 'thread-123',
-        owner,
-        title: 'thread 1',
-        body: 'isi thread 1',
-      }
       // Arrange
       await ThreadsTableTestHelper.addThread(threadPayload);
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
