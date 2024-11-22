@@ -161,11 +161,11 @@ describe('GetDetailThreadUseCase', () => {
 
     expect(result).toEqual(
       new DetailThread({
-        id: mockThread.id,
-        title: mockThread.title,
-        body: mockThread.body,
-        date: mockThread.date,
-        username: mockThread.username,
+        id: 'thread-125',
+        title: 'Thread Title',
+        body: 'Thread Body',
+        date: '2023-11-19',
+        username: 'user 1',
         comments: [],
       }),
     );
@@ -222,11 +222,11 @@ describe('GetDetailThreadUseCase', () => {
     expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-126');
     expect(result).toEqual(
       new DetailThread({
-        id: mockThread.id,
-        title: mockThread.title,
-        body: mockThread.body,
-        date: mockThread.date,
-        username: mockThread.username,
+        id: 'thread-126',
+        title: 'Thread Title',
+        body: 'Thread Body',
+        date: '2023-11-19',
+        username: 'john_doe',
         comments: [
           new DetailComment({
             id: 'comment-126',

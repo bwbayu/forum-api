@@ -31,8 +31,8 @@ describe('AddThreadUseCase', () => {
     expect(mockThreadRepository.addThread).toHaveBeenCalledWith(new NewThread(useCasePayload));
     expect(addedThread).toStrictEqual(new AddedThread({
       id: 'thread-123',
-      title: useCasePayload.title,
-      owner: useCasePayload.owner,
+      title: 'thread 1',
+      owner: 'user-123',
     }));
   });
 });
