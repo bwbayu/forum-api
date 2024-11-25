@@ -38,18 +38,8 @@ describe('ReplyRepositoryPostgres', () => {
     is_delete: false,
   }
 
-  const replyPayload2 = {
-    id: 'reply-124',
-    thread_id: threadPayload.id,
-    owner,
-    comment_id: commentPayload.id,
-    content: 'This is a reply comment 2',
-    created_at: new Date().toISOString(),
-    is_delete: false,
-  }
-
   beforeAll(async () => {
-    await UsersTableTestHelper.addUser({ id: owner });
+    await UsersTableTestHelper.addUser({ id: owner, username: 'dicoding' });
     await ThreadsTableTestHelper.addThread(threadPayload);
     await CommentsTableTestHelper.addComment(commentPayload);
   });
@@ -116,12 +106,16 @@ describe('ReplyRepositoryPostgres', () => {
   describe('getReplyByCommentId function', () => {
     it('should return replies by comment id', async () => {
       await RepliesTableTestHelper.addReply(replyPayload1);
-      await RepliesTableTestHelper.addReply(replyPayload2);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
       const replies = await replyRepositoryPostgres.getReplyByCommentId(commentPayload.id);
 
-      expect(replies).toHaveLength(2);
+      expect(replies).toHaveLength(1);
+      expect(replies[0].is_delete).toEqual(false);
+      expect(replies[0].id).toEqual('reply-123');
+      expect(replies[0].username).toEqual('dicoding');
+      expect(replies[0].content).toEqual('This is a reply comment');
+      expect(replies[0].date).toEqual(replies[0].date);
     });
 
     it('should return empty array if no replies found for comment', async () => {
