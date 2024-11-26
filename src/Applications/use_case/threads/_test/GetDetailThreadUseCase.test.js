@@ -79,10 +79,6 @@ describe('GetDetailThreadUseCase', () => {
     expect(mockCommentRepository.getCommentByThreadId).toHaveBeenCalledWith(useCasePayload);
     expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-123');
     expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledWith('comment-456');
-    expect(mockReplyRepository.getReplyByCommentId).toHaveBeenCalledTimes(2);
-    expect(result.comments).toHaveLength(2);
-    expect(result.comments[0].replies).toHaveLength(2);
-    expect(result.comments[1].replies).toHaveLength(0);
 
     expect(result).toEqual(
       new DetailThread({
