@@ -76,7 +76,7 @@ describe('ThreadRepositoryPostgres', () => {
       expect(thread.title).toEqual('thread 1');
       expect(thread.body).toEqual('isi thread 1');
       expect(thread.username).toEqual(username);
-      expect(thread.date).toEqual(thread.date);
+      expect(thread.created_at).toEqual(thread.created_at);
     });
   });
 

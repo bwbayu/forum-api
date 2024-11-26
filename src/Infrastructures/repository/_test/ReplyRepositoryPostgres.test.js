@@ -93,7 +93,7 @@ describe('ReplyRepositoryPostgres', () => {
       expect(reply[0].owner).toEqual('user-123');
       expect(reply[0].comment_id).toEqual('comment-123');
       expect(reply[0].content).toEqual('This is a reply comment');
-      expect(reply[0].date).toEqual(reply[0].date);
+      expect(reply[0].created_at).toEqual(reply[0].created_at);
     });
 
     it('should throw NotFoundError when deleting a non-existent reply', async () => {
@@ -115,7 +115,7 @@ describe('ReplyRepositoryPostgres', () => {
       expect(replies[0].id).toEqual('reply-123');
       expect(replies[0].username).toEqual('dicoding');
       expect(replies[0].content).toEqual('This is a reply comment');
-      expect(replies[0].date).toEqual(replies[0].date);
+      expect(replies[0].created_at).toEqual(replies[0].created_at);
     });
 
     it('should return empty array if no replies found for comment', async () => {
@@ -140,7 +140,7 @@ describe('ReplyRepositoryPostgres', () => {
       expect(replies.owner).toEqual('user-123');
       expect(replies.comment_id).toEqual('comment-123');
       expect(replies.content).toEqual('This is a reply comment');
-      expect(replies.date).toEqual(replies.date);
+      expect(replies.created_at).toEqual(replies.created_at);
     });
 
     it('should throw NotFoundError if reply id is not found', async () => {

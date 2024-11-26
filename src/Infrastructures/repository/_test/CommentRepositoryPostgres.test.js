@@ -78,7 +78,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment[0].thread_id).toEqual('thread-123');
       expect(comment[0].owner).toEqual('user-123');
       expect(comment[0].content).toEqual('This is a comment');
-      expect(comment[0].date).toEqual(comment[0].date);
+      expect(comment[0].created_at).toEqual(comment[0].created_at);
     });
 
     it('should throw NotFoundError when deleting a non-existent comment', async () => {
@@ -99,7 +99,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comments[0].is_delete).toEqual(false);
       expect(comments[0].id).toEqual('comment-123');
       expect(comments[0].content).toEqual('This is a comment');
-      expect(comments[0].date).toEqual(comments[0].date);
+      expect(comments[0].created_at).toEqual(comments[0].created_at);
       expect(comments[0].username).toEqual('dicoding');
     });
 
@@ -124,7 +124,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment.owner).toEqual('user-123');
       expect(comment.content).toEqual('This is a comment');
       expect(comment.is_delete).toEqual(false);
-      expect(comment.date).toEqual(comment.date);
+      expect(comment.created_at).toEqual(comment.created_at);
     });
 
     it('should throw NotFoundError if comment id is not found', async () => {
