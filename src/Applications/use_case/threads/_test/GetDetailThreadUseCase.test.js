@@ -11,47 +11,51 @@ describe('GetDetailThreadUseCase', () => {
 
     const mockReplies = {
       'comment-123': [
-        new DetailReply({
+        {
           id: 'reply-123',
           content: 'Reply Content 1',
           date: '2023-11-18',
           username: 'bob',
-        }),
-        new DetailReply({
+          is_delete: false,
+        },
+        {
           id: 'reply-124',
           content: '**balasan telah dihapus**',
           date: '2023-11-18',
           username: 'bob 2',
-        }),
+          is_delete: true,
+        },
       ],
       'comment-456': [],
     };
     
     const mockComments = [
-      new DetailComment({
+      {
         id: 'comment-123',
         content: 'Comment Content 1',
         date: '2023-11-18',
         username: 'jane_doe',
         replies: mockReplies['comment-123'],
-      }),
-      new DetailComment({
+        is_delete: false,
+      },
+      {
         id: 'comment-456',
         content: '**komentar telah dihapus**',
         date: '2023-11-17',
         username: 'alice',
         replies: mockReplies['comment-456'],
-      }),
+        is_delete: true,
+      },
     ];
     
-    const mockThread = new DetailThread({
+    const mockThread = {
       id: 'thread-123',
       title: 'Thread Title',
       body: 'Thread Body',
       date: '2023-11-19',
       username: 'john_doe',
       comments: mockComments,
-    });
+    };
 
     const mockThreadRepository = {
       verifyThreadAvailability: jest.fn().mockResolvedValue(),
