@@ -16,6 +16,7 @@ describe('a DetailComment entity', () => {
       id: 123,
       content: 'This is a comment',
       date: '2024-11-15',
+      is_delete: false,
       username: 123,
       replies: [],
     };
@@ -28,6 +29,7 @@ describe('a DetailComment entity', () => {
       id: 'comment-123',
       content: 'This is a comment',
       date: '2024-11-15',
+      is_delete: false,
       username: 'user-123',
       replies: [],
     };
@@ -37,6 +39,7 @@ describe('a DetailComment entity', () => {
     expect(detailComment.id).toEqual('comment-123');
     expect(detailComment.content).toEqual('This is a comment');
     expect(detailComment.date).toEqual('2024-11-15');
+    expect(detailComment.is_delete).toEqual(false);
     expect(detailComment.username).toEqual('user-123');
     expect(detailComment.replies).toEqual([]);
   });

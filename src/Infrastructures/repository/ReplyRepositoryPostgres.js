@@ -2,6 +2,7 @@ const AuthorizationError = require('../../Commons/exceptions/AuthorizationError'
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const ReplyRepository = require('../../Domains/replies/ReplyRepository');
 const AddedReply = require('../../Domains/replies/entities/AddedReply');
+const DetailReply = require('../../Domains/replies/entities/DetailReply');
 
 class ReplyRepositoryPostgres extends ReplyRepository {
   constructor(pool, idGenerator) {
@@ -51,7 +52,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
       return [];
     }
 
-    return result.rows;
+    return result.rows.map((reply) => new DetailReply(reply));
   }
 
   async getReplyById(reply_id) {

@@ -11,51 +11,51 @@ describe('GetDetailThreadUseCase', () => {
 
     const mockReplies = {
       'comment-123': [
-        {
+        new DetailReply({
           id: 'reply-123',
           content: 'Reply Content 1',
           date: '2023-11-18',
           username: 'bob',
           is_delete: false,
-        },
-        {
+        }),
+        new DetailReply({
           id: 'reply-124',
-          content: '**balasan telah dihapus**',
+          content: 'Reply 2 content 1',
           date: '2023-11-18',
           username: 'bob 2',
           is_delete: true,
-        },
+        }),
       ],
       'comment-456': [],
     };
     
     const mockComments = [
-      {
+      new DetailComment({
         id: 'comment-123',
         content: 'Comment Content 1',
         date: '2023-11-18',
         username: 'jane_doe',
-        replies: mockReplies['comment-123'],
+        replies: [],
         is_delete: false,
-      },
-      {
+      }),
+      new DetailComment({
         id: 'comment-456',
-        content: '**komentar telah dihapus**',
+        content: 'Comment Content 2',
         date: '2023-11-17',
         username: 'alice',
-        replies: mockReplies['comment-456'],
+        replies: [],
         is_delete: true,
-      },
+      }),
     ];
     
-    const mockThread = {
+    const mockThread = new DetailThread({
       id: 'thread-123',
       title: 'Thread Title',
       body: 'Thread Body',
       date: '2023-11-19',
       username: 'john_doe',
-      comments: mockComments,
-    };
+      comments: [],
+    });
 
     const mockThreadRepository = {
       verifyThreadAvailability: jest.fn().mockResolvedValue(),
@@ -97,18 +97,21 @@ describe('GetDetailThreadUseCase', () => {
             content: 'Comment Content 1',
             date: '2023-11-18',
             username: 'jane_doe',
+            is_delete: false,
             replies: [
               new DetailReply({
                 id: 'reply-123',
                 content: 'Reply Content 1',
                 date: '2023-11-18',
                 username: 'bob',
+                is_delete: false,
               }),
               new DetailReply({
                 id: 'reply-124',
                 content: '**balasan telah dihapus**',
                 date: '2023-11-18',
                 username: 'bob 2',
+                is_delete: true,
               }),
             ],
           }),
@@ -117,6 +120,7 @@ describe('GetDetailThreadUseCase', () => {
             content: '**komentar telah dihapus**',
             date: '2023-11-17',
             username: 'alice',
+            is_delete: true,
             replies: [],
           }),
         ],
@@ -184,6 +188,7 @@ describe('GetDetailThreadUseCase', () => {
         content: 'Comment Content 1',
         date: '2023-11-18',
         username: 'jane_doe',
+        is_delete: false,
         replies: [],
       }),
     ];
@@ -194,7 +199,7 @@ describe('GetDetailThreadUseCase', () => {
       body: 'Thread Body',
       date: '2023-11-19',
       username: 'john_doe',
-      comments: mockComments,
+      comments: [],
     });
   
     const mockThreadRepository = {
@@ -234,6 +239,7 @@ describe('GetDetailThreadUseCase', () => {
             content: 'Comment Content 1',
             date: '2023-11-18',
             username: 'jane_doe',
+            is_delete: false,
             replies: [],
           }),
         ],

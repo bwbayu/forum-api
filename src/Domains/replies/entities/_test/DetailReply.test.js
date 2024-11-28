@@ -13,6 +13,7 @@ describe('a DetailReply entity', () => {
       content: 'This is a reply comment',
       date: '2024-11-15',
       username: 123,
+      is_delete: false,
     };
 
     expect(() => new DetailReply(payload)).toThrowError('DETAIL_REPLY.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -24,6 +25,7 @@ describe('a DetailReply entity', () => {
       content: 'This is a reply comment',
       date: '2024-11-15',
       username: 'user-123',
+      is_delete: false,
     };
 
     const detailReply = new DetailReply(payload);
@@ -32,5 +34,6 @@ describe('a DetailReply entity', () => {
     expect(detailReply.content).toEqual('This is a reply comment');
     expect(detailReply.date).toEqual('2024-11-15');
     expect(detailReply.username).toEqual('user-123');
+    expect(detailReply.is_delete).toEqual(false);
   });
 });

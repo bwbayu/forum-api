@@ -8,6 +8,7 @@ const ReplyRepositoryPostgres = require('../ReplyRepositoryPostgres');
 const AddedReply = require('../../../Domains/replies/entities/AddedReply');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
+const DetailReply = require('../../../Domains/replies/entities/DetailReply');
 /* eslint-disable no-undef */
 describe('ReplyRepositoryPostgres', () => {
   const owner = 'user-123';
@@ -111,11 +112,13 @@ describe('ReplyRepositoryPostgres', () => {
       const replies = await replyRepositoryPostgres.getReplyByCommentId(commentPayload.id);
 
       expect(replies).toHaveLength(1);
-      expect(replies[0].is_delete).toEqual(false);
-      expect(replies[0].id).toEqual('reply-123');
-      expect(replies[0].username).toEqual('dicoding');
-      expect(replies[0].content).toEqual('This is a reply comment');
-      expect(replies[0].created_at).toEqual(replies[0].created_at);
+      expect(replies[0]).toStrictEqual(new DetailReply({
+        id: 'reply-123',
+        content: 'This is a reply comment',
+        is_delete: false,
+        date: replies[0].date,
+        username: 'dicoding',
+      }));
     });
 
     it('should return empty array if no replies found for comment', async () => {

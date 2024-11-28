@@ -2,6 +2,7 @@ const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
+const DetailComment = require('../../Domains/comments/entities/DetailComment');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -48,7 +49,13 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       return [];
     }
-    return result.rows;
+
+    const comments = result.rows.map((row) => ({
+      ...row,
+      replies: [],
+    }));
+
+    return comments.map((comment) => new DetailComment(comment));
   }
 
   async getCommentById(comment_id) {

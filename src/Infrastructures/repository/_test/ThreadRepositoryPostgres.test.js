@@ -5,6 +5,7 @@ const NewThread = require('../../../Domains/threads/entities/NewThread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
+const DetailThread = require('../../../Domains/threads/entities/DetailThread');
 /* eslint-disable no-undef */
 describe('ThreadRepositoryPostgres', () => {
   const owner = 'user-123';
@@ -70,13 +71,15 @@ describe('ThreadRepositoryPostgres', () => {
 
       // Action
       const thread = await threadRepositoryPostgres.getThreadById('thread-123');
-
-      // Assert
-      expect(thread.id).toEqual('thread-123');
-      expect(thread.title).toEqual('thread 1');
-      expect(thread.body).toEqual('isi thread 1');
-      expect(thread.username).toEqual(username);
-      expect(thread.created_at).toEqual(thread.created_at);
+      // Assert 
+      expect(thread).toStrictEqual(new DetailThread({
+        id: 'thread-123',
+        title: 'thread 1',
+        body: 'isi thread 1',
+        date: thread.date,
+        username: 'user_john',
+        comments: [],
+      }));
     });
   });
 

@@ -7,6 +7,7 @@ const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const pool = require('../../database/postgres/pool');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError');
 const NewComment = require('../../../Domains/comments/entities/NewComment');
+const DetailComment = require('../../../Domains/comments/entities/DetailComment');
 /* eslint-disable no-undef */
 describe('CommentRepositoryPostgres', () => {
   const owner = 'user-123';
@@ -96,11 +97,14 @@ describe('CommentRepositoryPostgres', () => {
       const comments = await commentRepositoryPostgres.getCommentByThreadId(threadPayload.id);
 
       expect(comments).toHaveLength(1);
-      expect(comments[0].is_delete).toEqual(false);
-      expect(comments[0].id).toEqual('comment-123');
-      expect(comments[0].content).toEqual('This is a comment');
-      expect(comments[0].created_at).toEqual(comments[0].created_at);
-      expect(comments[0].username).toEqual('dicoding');
+      expect(comments[0]).toStrictEqual(new DetailComment({
+        id: 'comment-123',
+        content: 'This is a comment',
+        is_delete: false,
+        date: comments[0].date,
+        username: 'dicoding',
+        replies: [],
+      }));
     });
 
     it('should return empty array if no comments found for thread', async () => {
