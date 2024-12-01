@@ -69,6 +69,24 @@ describe('/comments endpoint', () => {
     return responseJson.data.addedThread.id;
   };
 
+  const addComment = async (accessToken, thread_id) => {
+    const commentPayload = {
+      content: 'komentar 1',
+    };
+
+    const response = await server.inject({
+      method: 'POST',
+      url: `/threads/${thread_id}/comments`,
+      payload: commentPayload,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    const responseJson = JSON.parse(response.payload);
+    return responseJson.data.addedComment.id;
+  };
+
   describe('when POST /threads/{threadId}/comments', () => {
     it('should response 201 and create new comment', async () => {
       const accessToken = await addUserAndGetAccessToken();
@@ -273,4 +291,72 @@ describe('/comments endpoint', () => {
       );
     });
   });
+
+  describe('when PUT /threads/{threadId}/comments/{commentId}/likes', () => {
+    it('should response 200 and toggle like for a comment', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+      const threadId = await addThread(accessToken);
+      const commentId = await addComment(accessToken, threadId);
+      
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${threadId}/comments/${commentId}/likes`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+    });
+  
+    it('should response 401 if no authorization provided', async () => {
+      const response = await server.inject({
+        method: 'PUT',
+        url: '/threads/thread-123/comments/comment-123/likes',
+      });
+  
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(401);
+      expect(responseJson.error).toEqual('Unauthorized');
+      expect(responseJson.message).toEqual('Missing authentication');
+    });
+  
+    it('should response 404 if thread does not exist', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+  
+      const response = await server.inject({
+        method: 'PUT',
+        url: '/threads/thread-123/comments/comment-123/likes',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('thread tidak ditemukan');
+    });
+  
+    it('should response 404 if comment does not exist', async () => {
+      const accessToken = await addUserAndGetAccessToken();
+      const threadId = await addThread(accessToken);
+  
+      const response = await server.inject({
+        method: 'PUT',
+        url: `/threads/${threadId}/comments/comment-123/likes`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(404);
+      expect(responseJson.status).toEqual('fail');
+      expect(responseJson.message).toEqual('komentar tidak ditemukan');
+    });
+  });
+  
 });
