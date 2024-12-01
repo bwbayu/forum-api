@@ -87,14 +87,13 @@ describe('ReplyRepositoryPostgres', () => {
       await replyRepositoryPostgres.deleteReply('reply-123');
 
       const reply = await RepliesTableTestHelper.findReplyById('reply-123');
+      const expectedReply = {
+        ...replyPayload1,
+        created_at: reply[0].created_at,
+        is_delete: true,
+      };
       expect(reply).toHaveLength(1);
-      expect(reply[0].is_delete).toEqual(true);
-      expect(reply[0].id).toEqual('reply-123');
-      expect(reply[0].thread_id).toEqual('thread-123');
-      expect(reply[0].owner).toEqual('user-123');
-      expect(reply[0].comment_id).toEqual('comment-123');
-      expect(reply[0].content).toEqual('This is a reply comment');
-      expect(reply[0].created_at).toEqual(reply[0].created_at);
+      expect(reply[0]).toStrictEqual(expectedReply);
     });
 
     it('should throw NotFoundError when deleting a non-existent reply', async () => {
@@ -135,15 +134,13 @@ describe('ReplyRepositoryPostgres', () => {
       await RepliesTableTestHelper.addReply(replyPayload1);
       const replyRepositoryPostgres = new ReplyRepositoryPostgres(pool, {});
 
-      const replies = await replyRepositoryPostgres.getReplyById('reply-123');
+      const reply = await replyRepositoryPostgres.getReplyById('reply-123');
 
-      expect(replies.is_delete).toEqual(false);
-      expect(replies.id).toEqual('reply-123');
-      expect(replies.thread_id).toEqual('thread-123');
-      expect(replies.owner).toEqual('user-123');
-      expect(replies.comment_id).toEqual('comment-123');
-      expect(replies.content).toEqual('This is a reply comment');
-      expect(replies.created_at).toEqual(replies.created_at);
+      const expectedReply = {
+        ...replyPayload1,
+        created_at: reply.created_at,
+      };
+      expect(reply).toStrictEqual(expectedReply);
     });
 
     it('should throw NotFoundError if reply id is not found', async () => {

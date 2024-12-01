@@ -58,13 +58,16 @@ describe('CommentRepositoryPostgres', () => {
 
       const addedComment = await commentRepositoryPostgres.addComment(comment);
 
-      const comments = await CommentsTableTestHelper.findCommentById('comment-123');
-      expect(comments).toHaveLength(1);
-      expect(addedComment).toStrictEqual(new AddedComment({
+      // Assert
+      const expectedComment = new AddedComment({
         id: 'comment-123',
         content: 'This is a comment',
         owner: 'user-123',
-      }));
+      });
+
+      const comments = await CommentsTableTestHelper.findCommentById('comment-123');
+      expect(comments).toHaveLength(1);
+      expect(addedComment).toStrictEqual(expectedComment);
     });
   });
 
@@ -75,14 +78,18 @@ describe('CommentRepositoryPostgres', () => {
 
       await commentRepositoryPostgres.deleteComment('comment-123');
 
-      const comment = await CommentsTableTestHelper.findCommentById('comment-123');
-      expect(comment).toHaveLength(1);
-      expect(comment[0].is_delete).toEqual(true);
-      expect(comment[0].id).toEqual('comment-123');
-      expect(comment[0].thread_id).toEqual('thread-123');
-      expect(comment[0].owner).toEqual('user-123');
-      expect(comment[0].content).toEqual('This is a comment');
-      expect(comment[0].created_at).toEqual(comment[0].created_at);
+      // Assert
+      const [comment] = await CommentsTableTestHelper.findCommentById('comment-123');
+      const expectedComment = {
+        id: 'comment-123',
+        thread_id: 'thread-123',
+        owner: 'user-123',
+        content: 'This is a comment',
+        is_delete: true,
+        created_at: comment.created_at,
+      };
+
+      expect(comment).toStrictEqual(expectedComment);
     });
 
     it('should throw NotFoundError when deleting a non-existent comment', async () => {
@@ -99,8 +106,8 @@ describe('CommentRepositoryPostgres', () => {
       
       const comments = await commentRepositoryPostgres.getCommentByThreadId(threadPayload.id);
 
-      expect(comments).toHaveLength(1);
-      expect(comments[0]).toStrictEqual(new DetailComment({
+      // Assert
+      const expectedComment = new DetailComment({
         id: 'comment-123',
         content: 'This is a comment',
         is_delete: false,
@@ -108,7 +115,10 @@ describe('CommentRepositoryPostgres', () => {
         username: 'dicoding',
         replies: [],
         likeCount: 0,
-      }));
+      });
+
+      expect(comments).toHaveLength(1);
+      expect(comments[0]).toStrictEqual(expectedComment);
     });
 
     it('should return empty array if no comments found for thread', async () => {
@@ -127,12 +137,17 @@ describe('CommentRepositoryPostgres', () => {
 
       const comment = await commentRepositoryPostgres.getCommentById('comment-123');
 
-      expect(comment.id).toEqual('comment-123');
-      expect(comment.thread_id).toEqual('thread-123');
-      expect(comment.owner).toEqual('user-123');
-      expect(comment.content).toEqual('This is a comment');
-      expect(comment.is_delete).toEqual(false);
-      expect(comment.created_at).toEqual(comment.created_at);
+      // Assert
+      const expectedComment = {
+        id: 'comment-123',
+        thread_id: 'thread-123',
+        owner: 'user-123',
+        content: 'This is a comment',
+        is_delete: false,
+        created_at: comment.created_at,
+      };
+
+      expect(comment).toStrictEqual(expectedComment);
     });
 
     it('should throw NotFoundError if comment id is not found', async () => {
@@ -194,12 +209,15 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
-      
+      const expectedLike = {
+        id: 'commentLike-123',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+        is_delete: false,
+      };
+
       expect(likes).toHaveLength(1);
-      expect(likes[0].id).toEqual('commentLike-123');
-      expect(likes[0].owner).toEqual('user-123');
-      expect(likes[0].comment_id).toEqual('comment-123');
-      expect(likes[0].is_delete).toEqual(false);
+      expect(likes[0]).toStrictEqual(expectedLike);
     });
 
     it('should unlike a comment if it is already liked', async () => {
@@ -218,11 +236,15 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
+      const expectedLike = {
+        id: 'commentLike-123',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+        is_delete: true,
+      };
+
       expect(likes).toHaveLength(1);
-      expect(likes[0].id).toEqual('commentLike-123');
-      expect(likes[0].owner).toEqual('user-123');
-      expect(likes[0].comment_id).toEqual('comment-123');
-      expect(likes[0].is_delete).toEqual(true);
+      expect(likes[0]).toStrictEqual(expectedLike);
     });
 
     it('should like a comment again if it is previously unliked', async () => {
@@ -241,11 +263,15 @@ describe('CommentRepositoryPostgres', () => {
 
       // Assert
       const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
+      const expectedLike = {
+        id: 'commentLike-123',
+        owner: 'user-123',
+        comment_id: 'comment-123',
+        is_delete: false,
+      };
+
       expect(likes).toHaveLength(1);
-      expect(likes[0].id).toEqual('commentLike-123');
-      expect(likes[0].owner).toEqual('user-123');
-      expect(likes[0].comment_id).toEqual('comment-123');
-      expect(likes[0].is_delete).toEqual(false);
+      expect(likes[0]).toStrictEqual(expectedLike);
     });
   });
 });
