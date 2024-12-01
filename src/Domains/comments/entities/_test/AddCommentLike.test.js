@@ -12,8 +12,8 @@ describe('an AddCommentLike entity', () => {
 
     it('should throw error when payload did not meet data type specification', () => {
         const payload = {
-          thread: 123,
-          comment: 'comment-123',
+          thread_id: 123,
+          comment_id: 'comment-123',
           owner: 'user-123',
         };
     
@@ -22,15 +22,15 @@ describe('an AddCommentLike entity', () => {
 
     it('should create AddCommentLike object correctly', () => {
         const payload = {
-            thread: 'thread-123',
-            comment: 'comment-123',
+            thread_id: 'thread-123',
+            comment_id: 'comment-123',
             owner: 'user-123',
           };
     
         const data = new AddCommentLike(payload);
     
-        expect(data.thread).toEqual('thread-123');
-        expect(data.comment).toEqual('comment-123');
+        expect(data.thread_id).toEqual('thread-123');
+        expect(data.comment_id).toEqual('comment-123');
         expect(data.owner).toEqual('user-123');
     });
 })

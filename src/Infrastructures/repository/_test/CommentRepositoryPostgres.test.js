@@ -1,6 +1,7 @@
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
+const CommentLikesTableTestHelper = require('../../../../tests/CommentLikesTableTestHelper');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
@@ -9,6 +10,7 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 const NewComment = require('../../../Domains/comments/entities/NewComment');
 const DetailComment = require('../../../Domains/comments/entities/DetailComment');
 /* eslint-disable no-undef */
+
 describe('CommentRepositoryPostgres', () => {
   const owner = 'user-123';
   const threadPayload = {
@@ -35,6 +37,7 @@ describe('CommentRepositoryPostgres', () => {
 
   afterEach(async () => {
     await CommentsTableTestHelper.cleanTable();
+    await CommentLikesTableTestHelper.cleanTable();
   });
 
   afterAll(async () => {
@@ -93,7 +96,7 @@ describe('CommentRepositoryPostgres', () => {
     it('should return comments by thread ID', async () => {
       await CommentsTableTestHelper.addComment(commentPayload);
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
-
+      
       const comments = await commentRepositoryPostgres.getCommentByThreadId(threadPayload.id);
 
       expect(comments).toHaveLength(1);
@@ -104,6 +107,7 @@ describe('CommentRepositoryPostgres', () => {
         date: comments[0].date,
         username: 'dicoding',
         replies: [],
+        likeCount: 0,
       }));
     });
 
@@ -176,6 +180,72 @@ describe('CommentRepositoryPostgres', () => {
       // Action
       await expect(commentRepositoryPostgres.verifyCommentAvailability('comment-123'))
         .resolves.not.toThrow(NotFoundError);
+    });
+  });
+
+  describe('toggleCommentLike function', () => {
+    it('should like a comment if it is not liked before', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment(commentPayload);
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
+
+      // Action
+      await commentRepositoryPostgres.toggleCommentLike('comment-123', owner);
+
+      // Assert
+      const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
+      
+      expect(likes).toHaveLength(1);
+      expect(likes[0].id).toEqual('commentLike-123');
+      expect(likes[0].owner).toEqual('user-123');
+      expect(likes[0].comment_id).toEqual('comment-123');
+      expect(likes[0].is_delete).toEqual(false);
+    });
+
+    it('should unlike a comment if it is already liked', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment(commentPayload);
+      await CommentLikesTableTestHelper.toggleCommentLikes({
+        id: 'commentLike-123',
+        comment_id: 'comment-123',
+        owner,
+        is_delete: false,
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
+
+      // Action
+      await commentRepositoryPostgres.toggleCommentLike('comment-123', owner);
+
+      // Assert
+      const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
+      expect(likes).toHaveLength(1);
+      expect(likes[0].id).toEqual('commentLike-123');
+      expect(likes[0].owner).toEqual('user-123');
+      expect(likes[0].comment_id).toEqual('comment-123');
+      expect(likes[0].is_delete).toEqual(true);
+    });
+
+    it('should like a comment again if it is previously unliked', async () => {
+      // Arrange
+      await CommentsTableTestHelper.addComment(commentPayload);
+      await CommentLikesTableTestHelper.toggleCommentLikes({
+        id: 'commentLike-123',
+        comment_id: 'comment-123',
+        owner,
+        is_delete: true,
+      });
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '123');
+
+      // Action
+      await commentRepositoryPostgres.toggleCommentLike('comment-123', owner);
+
+      // Assert
+      const likes = await CommentLikesTableTestHelper.findCommentLikes('comment-123', owner);
+      expect(likes).toHaveLength(1);
+      expect(likes[0].id).toEqual('commentLike-123');
+      expect(likes[0].owner).toEqual('user-123');
+      expect(likes[0].comment_id).toEqual('comment-123');
+      expect(likes[0].is_delete).toEqual(false);
     });
   });
 });

@@ -38,6 +38,7 @@ describe('GetDetailThreadUseCase', () => {
         username: 'jane_doe',
         replies: [],
         is_delete: false,
+        likeCount: 0,
       }),
       new DetailComment({
         id: 'comment-456',
@@ -46,6 +47,7 @@ describe('GetDetailThreadUseCase', () => {
         username: 'alice',
         replies: [],
         is_delete: true,
+        likeCount: 0,
       }),
     ];
     
@@ -98,6 +100,7 @@ describe('GetDetailThreadUseCase', () => {
             content: 'Comment Content 1',
             date: '2023-11-18',
             username: 'jane_doe',
+            likeCount: 0,
             replies: [
               {
                 id: 'reply-123',
@@ -118,6 +121,7 @@ describe('GetDetailThreadUseCase', () => {
             content: '**komentar telah dihapus**',
             date: '2023-11-17',
             username: 'alice',
+            likeCount: 0,
             replies: [],
           },
         ],
@@ -187,6 +191,7 @@ describe('GetDetailThreadUseCase', () => {
         username: 'jane_doe',
         is_delete: false,
         replies: [],
+        likeCount: 0,
       }),
     ];
   
@@ -236,6 +241,7 @@ describe('GetDetailThreadUseCase', () => {
             content: 'Comment Content 1',
             date: '2023-11-18',
             username: 'jane_doe',
+            likeCount: 0,
             replies: [],
           },
         ],

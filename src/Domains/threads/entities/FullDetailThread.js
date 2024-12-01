@@ -34,7 +34,8 @@ class FullDetailThread {
             || !comments[i].content 
             || !comments[i].date
             || !comments[i].username 
-            || !comments[i].replies) {
+            || !comments[i].replies
+            || comments[i].likeCount === undefined) {
             throw new Error('FULL_DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
         }
       
@@ -42,7 +43,8 @@ class FullDetailThread {
             || typeof comments[i].content !== 'string'
             || !(comments[i].date instanceof Date || typeof comments[i].date === 'string')
             || typeof comments[i].username !== 'string'
-            || !Array.isArray(comments[i].replies)) {
+            || !Array.isArray(comments[i].replies)
+            || typeof comments[i].likeCount !== 'number') {
         throw new Error('FULL_DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
         }
 

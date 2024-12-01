@@ -33,6 +33,7 @@ class GetDetailThreadUseCase {
         date: comment.date,
         username: comment.username,
         replies: processedReplies,
+        likeCount: comment.likeCount,
       });
     }
 

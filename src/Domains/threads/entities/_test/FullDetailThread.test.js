@@ -54,6 +54,7 @@ describe('a Full Detail Thread entities', () => {
                 date: '2024-11-15',
                 username: 456,
                 replies: 'invalid replies',
+                likeCount: 0,
             },
         ],
       };
@@ -74,6 +75,7 @@ describe('a Full Detail Thread entities', () => {
                 content: 'This is a comment',
                 date: '2024-11-15',
                 username: 'user 2',
+                likeCount: 0,
                 replies: [
                     {
                         content: 'This is a reply',
@@ -99,6 +101,7 @@ describe('a Full Detail Thread entities', () => {
                 content: 'This is a comment',
                 date: '2024-11-15',
                 username: 'user 2',
+                likeCount: 0,
                 replies: [
                     {
                         id: 123,
@@ -127,6 +130,7 @@ describe('a Full Detail Thread entities', () => {
                 content: 'This is a comment',
                 date: '2024-11-15',
                 username: 'user 2',
+                likeCount: 0,
                 replies: [
                     {
                         id: 'reply-123',
@@ -153,6 +157,7 @@ describe('a Full Detail Thread entities', () => {
     expect(comment.content).toEqual(payload.comments[0].content);
     expect(comment.date).toEqual(payload.comments[0].date);
     expect(comment.username).toEqual(payload.comments[0].username);
+    expect(comment.likeCount).toEqual(payload.comments[0].likeCount);
     expect(comment.replies).toHaveLength(payload.comments[0].replies.length);
     // check reply
     const reply = comment.replies[0];

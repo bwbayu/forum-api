@@ -19,6 +19,7 @@ describe('a DetailComment entity', () => {
       is_delete: false,
       username: 123,
       replies: [],
+      likeCount: 0,
     };
 
     expect(() => new DetailComment(payload)).toThrowError('DETAIL_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
@@ -32,6 +33,7 @@ describe('a DetailComment entity', () => {
       is_delete: false,
       username: 'user-123',
       replies: [],
+      likeCount: 0,
     };
 
     const detailComment = new DetailComment(payload);
@@ -42,5 +44,6 @@ describe('a DetailComment entity', () => {
     expect(detailComment.is_delete).toEqual(false);
     expect(detailComment.username).toEqual('user-123');
     expect(detailComment.replies).toEqual([]);
+    expect(detailComment.likeCount).toEqual(0);
   });
 });

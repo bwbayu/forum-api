@@ -41,7 +41,20 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async getCommentByThreadId(thread_id) {
     const query = {
-      text: 'SELECT c.id, u.username, c.created_at AS date, c.content, c.is_delete FROM comments AS c LEFT JOIN users u ON c.owner = u.id WHERE c.thread_id = $1 ORDER BY c.created_at ASC;',
+      text: `
+        SELECT c.id, u.username, c.created_at AS date, c.content, c.is_delete, 
+        COALESCE(like_count.like_count, 0) :: integer AS like_count 
+        FROM comments AS c
+        LEFT JOIN users AS u ON c.owner = u.id
+        LEFT JOIN (
+          SELECT comment_id, COUNT(*) AS like_count
+          FROM comment_likes
+          WHERE is_delete = false
+          GROUP BY comment_id
+        ) AS like_count ON like_count.comment_id = c.id
+        WHERE c.thread_id = $1
+        ORDER BY c.created_at ASC;
+      `,
       values: [thread_id],
     };
 
@@ -49,12 +62,12 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       return [];
     }
-
     const comments = result.rows.map((row) => ({
       ...row,
       replies: [],
+      likeCount: row.like_count,
     }));
-
+    
     return comments.map((comment) => new DetailComment(comment));
   }
 
@@ -97,6 +110,24 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new NotFoundError('komentar tidak ditemukan');
     }
+  }
+
+  // LIKE
+  async toggleCommentLike(comment_id, owner) {
+    const id = `commentLike-${this._idGenerator()}`;
+    
+    const query = {
+      text: `
+        INSERT INTO comment_likes (id, owner, comment_id, is_delete)
+        VALUES ($1, $2, $3, false)
+        ON CONFLICT (comment_id, owner)
+        DO UPDATE SET is_delete = NOT comment_likes.is_delete
+        RETURNING id;
+      `,
+      values: [id, owner, comment_id],
+    };
+
+    await this._pool.query(query);
   }
 }
 
