@@ -27,6 +27,13 @@ Would you like to …… (seluruh pertanyaan selanjutnya) -> Y.
 - check eslint : npm run lint
 - auto fix : npx eslint . --fix
 
+# Command
+1. masuk ke EC2 Instance : ssh -i "<berkas.pem>" ubuntu@<public dns ec2 instance>
+2. membuat file baru : touch <nama_file>
+3. membuat dir baru : mkdir <nama_dir>
+4. edit file : vim <nama_file>
+5. restart server nginx : sudo systemctl restart nginx
+
 # **Alur Kerja Program dengan Clean Architecture**
 
 Dokumen ini menjelaskan struktur dan alur kerja program berbasis **Clean Architecture**. Penjelasan ini bertujuan untuk memberikan panduan yang jelas mengenai peran setiap lapisan dalam aplikasi.
