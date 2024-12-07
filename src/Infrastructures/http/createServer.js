@@ -7,6 +7,9 @@ const authentications = require('../../Interfaces/http/api/authentications');
 const threads = require('../../Interfaces/http/api/threads');
 const comments = require('../../Interfaces/http/api/comments');
 const replies = require('../../Interfaces/http/api/replies');
+const HapiSwagger = require('hapi-swagger');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision')
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -14,10 +17,37 @@ const createServer = async (container) => {
     port: process.env.PORT,
   });
 
+  const swaggerOptions = {
+    info: {
+      title: 'Forum API Documentation',
+      version: '1.0.0',
+    },
+    securityDefinitions: {
+      jwt: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header'
+      }
+    },
+    security: [{ jwt: [] }],
+    schemes: ['http','https']
+  };
+  
+
   await server.register([
     {
       plugin: Jwt,
     },
+    {
+      plugin: Inert,
+    },
+    {
+      plugin: Vision,
+    },
+    {
+      plugin: HapiSwagger,
+      options: swaggerOptions
+    }
   ]);
 
   server.auth.strategy('forum_jwt', 'jwt', {

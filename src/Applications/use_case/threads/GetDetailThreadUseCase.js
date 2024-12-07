@@ -13,7 +13,7 @@ class GetDetailThreadUseCase {
 
     const thread = await this._threadRepository.getThreadById(useCasePayload);
     const comments = await this._commentRepository.getCommentByThreadId(useCasePayload);
-    
+    console.log("beres validasi use case");
     const processedComments = [];
     for (const comment of comments) {
       const content = comment.is_delete ? "**komentar telah dihapus**" : comment.content;
@@ -45,7 +45,7 @@ class GetDetailThreadUseCase {
       username: thread.username,
       comments: processedComments,
     });
-    
+    console.log(fullDetailThread);
     return fullDetailThread;
   }
 }
