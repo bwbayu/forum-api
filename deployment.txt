@@ -1,0 +1,23 @@
+# Deploy App Via EC2
+- access ec2 instance via ssh : ssh -i "<key>.pem" <user>@<alamat instance EC2>
+- download node.js : curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+- install node.js : sudo apt-get install -y nodejs
+- install production manager package : sudo npm install pm2 -g (to keep applications alive forever)
+- clone repo : git clone <remote repository URL>
+- install package : npm install
+- create .env : touch .env
+- open .env : vim .env
+
+## Create Database Configuration
+- create folder : mkdir -p config/database
+- create db conf file : touch config/database/test.json
+- open db conf file : vim config/database/test.json
+- migration database : npm run migrate up; npm run migrate:test up;
+- run testing : npm run test
+- run HTTP server using pm2 : pm2 start npm --name "forum-api" -- run "start"
+
+## Configure Database in RDS
+- psql --host <endpoint> --username <username>
+
+##
+- CREATE DATABASE forumapi; CREATE DATABASE forumapi_test;
